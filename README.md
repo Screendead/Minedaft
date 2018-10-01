@@ -1,6 +1,6 @@
 # Minecraft
 
-A low-budget Java recreation of Minecraft. For science.
+A low-budget adaptation of Minecraft with LWJGL and JOML. For science.
 
 ## Getting Started
 
