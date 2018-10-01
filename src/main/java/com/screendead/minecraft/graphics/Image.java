@@ -50,10 +50,16 @@ public class Image {
         Image.unbind();
     }
 
+    /**
+     * @return The texture ID
+     */
     public int getID() {
         return id;
     }
 
+    /**
+     * @return A Vector2i storing width and height
+     */
     public Vector2i getSize() {
         return new Vector2i(width, height);
     }

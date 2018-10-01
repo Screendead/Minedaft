@@ -47,7 +47,7 @@ public class Window {
         glfwMakeContextCurrent(handle);
         renderer.init();
         // Enable v-sync
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(handle, (handle, key, scancode, action, mods) -> {

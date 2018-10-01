@@ -59,6 +59,10 @@ public class Renderer {
 
         // Enable 2D texturing
         glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+
+        // OpenGL settings
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         texture = new Image("heart.png");
 
@@ -66,6 +70,11 @@ public class Renderer {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
+    /**
+     * Set the OpenGL viewport transformation and update the viewMatrix
+     * @param width The window width
+     * @param height The window height
+     */
     public void setViewport(float width, float height) {
         // Set the viewport
         glViewport(0, 0, (int) width, (int) height);
