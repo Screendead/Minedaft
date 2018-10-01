@@ -1,20 +1,13 @@
 package com.screendead.minecraft.graphics;
 
 import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.stb.STBImage;
-
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 public class Renderer {
-    private int id;
+    private Image texture;
     private Matrix4f viewMatrix;
 
     public Renderer() {
@@ -32,7 +25,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Bind the texture
-        glBindTexture(GL_TEXTURE_2D, id);
+        texture.bind();
 
         // Draw a textured quad to the framebuffer
         glBegin(GL_QUADS);
@@ -50,7 +43,7 @@ public class Renderer {
         glEnd();
 
         // Unbind the texture
-        glBindTexture(GL_TEXTURE_2D, 0);
+        Image.unbind();
     }
 
     /**
@@ -67,44 +60,10 @@ public class Renderer {
         // Enable 2D texturing
         glEnable(GL_TEXTURE_2D);
 
+        texture = new Image("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
+
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    }
-
-    /**
-     * Set an image file for texturing
-     * @param source The path to the file to be used
-     */
-    public void initImage(String source) {
-        // Get an image for texturing
-        IntBuffer w = BufferUtils.createIntBuffer(1),
-                h = BufferUtils.createIntBuffer(1),
-                channels = BufferUtils.createIntBuffer(1);
-        STBImage.stbi_set_flip_vertically_on_load(true);
-        ByteBuffer img = STBImage.stbi_load(source, w, h, channels, 4);
-        if (img == null) throw new RuntimeException("Failed to load texture.");
-
-        int width = w.get(),
-                height = h.get();
-        id = glGenTextures();
-        if (id == 0) throw new RuntimeException("Failed to allocate texture ID.");
-
-        // Bind the texture
-        glBindTexture(GL_TEXTURE_2D, id);
-
-        // Set texture parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-        // Flip the buffer for reading
-        img.flip();
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
-
-        // Unbind the texture
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     public void setViewport(float width, float height) {
@@ -112,6 +71,6 @@ public class Renderer {
         glViewport(0, 0, (int) width, (int) height);
 
         // Update the viewMatrix for scaling
-        viewMatrix = new Matrix4f().setOrtho2D((float) -width / height, (float) width / height, -1, 1);
+        viewMatrix = new Matrix4f().setOrtho2D(-width / height, width / height, -1, 1);
     }
 }
