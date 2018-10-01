@@ -1,10 +1,14 @@
 package com.screendead.minecraft.graphics;
 
 import org.joml.Vector2i;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -34,6 +38,8 @@ public class Window {
         handle = glfwCreateWindow(width, height, title, NULL, NULL);
         if (handle == NULL)
             throw new RuntimeException("Failed to create the GLFW window.");
+
+        setIcon("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
 
         renderer = new Renderer();
 
@@ -115,6 +121,23 @@ public class Window {
                 (vidmode.width() - size.x) / 2,
                 (vidmode.height() - size.y) / 2
         );
+    }
+
+    /**
+     * Set the icon of the window
+     * @param source The image to use as icon
+     */
+    public void setIcon(String source) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer w = BufferUtils.createIntBuffer(1),
+                    h = BufferUtils.createIntBuffer(1),
+                    channels = BufferUtils.createIntBuffer(1);
+
+            ByteBuffer img = STBImage.stbi_load(source, w, h, channels, 4);
+            if (img == null) throw new RuntimeException("Icon failed to load.");
+
+            glfwSetWindowIcon(handle, GLFWImage.create(1).put(0, GLFWImage.create().set(w.get(), h.get(), img)));
+        }
     }
 
     /**

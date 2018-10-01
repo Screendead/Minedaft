@@ -21,8 +21,8 @@ public class Image {
                 h = BufferUtils.createIntBuffer(1),
                 channels = BufferUtils.createIntBuffer(1);
         STBImage.stbi_set_flip_vertically_on_load(true);
-        ByteBuffer img = STBImage.stbi_load(source, w, h, channels, 4);
-        if (img == null) throw new RuntimeException("Failed to load texture.");
+        ByteBuffer img = STBImage.stbi_load("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/" + source, w, h, channels, 4);
+        if (img == null) throw new RuntimeException("Texture " + source + " failed to load.");
 
         // Store width and height values
         width = w.get();

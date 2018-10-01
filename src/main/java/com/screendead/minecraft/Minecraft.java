@@ -12,7 +12,7 @@ public class Minecraft {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         // Create the window
-        window = new Window("Minecraft", 800, 800);
+        window = new Window("Minecraft", 1080, 720);
 
         // Start the game loop
         loop();

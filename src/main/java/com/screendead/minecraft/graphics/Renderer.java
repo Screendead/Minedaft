@@ -60,7 +60,7 @@ public class Renderer {
         // Enable 2D texturing
         glEnable(GL_TEXTURE_2D);
 
-        texture = new Image("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
+        texture = new Image("heart.png");
 
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
