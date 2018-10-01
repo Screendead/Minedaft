@@ -21,7 +21,7 @@ public class Minecraft {
     }
 
     private void loop() {
-        window.initImage("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
+        window.renderer.initImage("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
