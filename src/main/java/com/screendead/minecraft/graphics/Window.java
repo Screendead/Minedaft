@@ -13,14 +13,18 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
     private long handle;
+    private boolean fullscreen = false, visible = false;
+    private int initialWidth, initialHeight;
+    private int width, height;
     public Renderer renderer;
+    private long monitor;
+    private GLFWVidMode v;
 
-    public Window(String title, int width, int height) {
+    public Window(String title, int width, int height, boolean isFullscreen) {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -29,8 +33,23 @@ public class Window {
         if (!glfwInit())
             throw new IllegalStateException("Unable to initialize GLFW");
 
+        monitor = glfwGetPrimaryMonitor();
+        v = glfwGetVideoMode(monitor);
+
+        initialWidth = width;
+        initialHeight = height;
+
+        if (fullscreen) {
+            this.width = v.width();
+            this.height = v.height();
+        } else {
+            this.width = width;
+            this.height = height;
+        }
+
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
+        glfwWindowHint(GLFW_SAMPLES, 4096); // Enable MSAA
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
@@ -39,38 +58,92 @@ public class Window {
         if (handle == NULL)
             throw new RuntimeException("Failed to create the GLFW window.");
 
+        // Set the icon of the window
         setIcon("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
+
+        // Set the window size limits
+        int minSize = 200;
+        glfwSetWindowSizeLimits(handle, minSize, minSize, v.width(), v.height());
+        this.centre();
 
         renderer = new Renderer();
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(handle);
         renderer.init();
-        // Enable v-sync
-        glfwSwapInterval(0);
+
+        this.autoViewport();
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(handle, (handle, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(handle, true); // We will detect this in the rendering loop
+            else if (key == GLFW_KEY_F11 && action == GLFW_RELEASE)
+                this.toggleFullscreen();
         });
 
         // Setup a resizing callback. Make sure the window behaves the way it should when resizing
         glfwSetWindowSizeCallback(handle, (handle, w, h) -> {
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            int minSize = 200;
-            glfwSetWindowSizeLimits(handle, minSize, minSize, Math.max(Math.max(vidmode.width(), minSize), h), Math.max(Math.min(w, vidmode.height()), minSize));
+            this.width = w;
+            this.height = h;
             this.autoViewport();
-            this.centre();
             this.render();
         });
 
-        // Centre and set viewport for the window
-        this.autoViewport();
-        this.centre();
+        if (isFullscreen) toggleFullscreen();
 
         // Make the window visible
-        glfwShowWindow(handle);
+        this.toggleVisibility();
+    }
+
+    public void toggleFullscreen() {
+        toggleVisibility();
+
+        fullscreen = !fullscreen;
+
+        if (fullscreen) {
+            width = v.width();
+            height = v.height();
+
+            // Toggle the window to fullscreen
+            glfwSetWindowMonitor(handle, monitor, 0, 0, width, height, v.refreshRate());
+
+            // Enable v-sync
+            glfwSwapInterval(1);
+        } else {
+            width = initialWidth;
+            height = initialHeight;
+
+            // Toggle the window to windowed mode
+            glfwSetWindowMonitor(handle, NULL, 0, 0, width, height, 0);
+
+            this.centre();
+        }
+
+        this.autoViewport();
+
+        toggleVisibility();
+    }
+
+    public void toggleVisibility() {
+        visible = !visible;
+
+        if (visible) {
+            glfwShowWindow(handle);
+        } else {
+            glfwHideWindow(handle);
+        }
+
+        glfwFocusWindow(handle);
+    }
+
+    /**
+     * Update the game
+     */
+    public void update(int start) {
+        renderer.setTransform(0, 0, 0,
+                0, (float) start, 0,
+                1.0f, 1.0f, 1.0f);
     }
 
     /**
@@ -141,18 +214,10 @@ public class Window {
     }
 
     /**
-     * Get the size of the window in pixels
-     * @return the size of the window
+     * @return the size of the window in pixels
      */
     private Vector2i getSize() {
-        try (MemoryStack stack = stackPush()) {
-            IntBuffer pWidth = stack.mallocInt(1); // int*
-            IntBuffer pHeight = stack.mallocInt(1); // int*
-
-            // Get the window size passed to glfwCreateWindow
-            glfwGetWindowSize(handle, pWidth, pHeight);
-            return new Vector2i(pWidth.get(), pHeight.get());
-        }
+        return new Vector2i(this.width, this.height);
     }
 
     /**

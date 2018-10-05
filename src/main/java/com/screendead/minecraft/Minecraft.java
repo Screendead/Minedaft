@@ -16,7 +16,7 @@ public class Minecraft {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         // Create the window
-        window = new Window("Minecraft", 1080, 720);
+        window = new Window("Minecraft", 1080, 720, false);
 
         // Start the game loop
         loop();
@@ -33,7 +33,7 @@ public class Minecraft {
         final float timeU = 1000000000.0f / UPS;
         final float timeF = 1000000000.0f / FPS;
         float deltaU = 0, deltaF = 0;
-        int frames = 0, ticks = 0;
+        int frames = 0, ticks = 0, totalTicks = 0;
         long timer = System.currentTimeMillis();
 
         while (!glfwWindowShouldClose(window.getHandle())) {
@@ -44,8 +44,9 @@ public class Minecraft {
 
             if (deltaU >= 1) {
                 glfwPollEvents();
-//                update();
+                window.update(totalTicks);
                 ticks++;
+                totalTicks++;
                 deltaU--;
             }
 
@@ -56,7 +57,7 @@ public class Minecraft {
             }
 
             if (System.currentTimeMillis() - timer > 1000) {
-//                System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
+                System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
                 frames = 0;
                 ticks = 0;
                 timer += 1000;
