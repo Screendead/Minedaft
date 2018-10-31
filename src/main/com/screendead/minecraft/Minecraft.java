@@ -1,9 +1,10 @@
 package com.screendead.minecraft;
 
-import com.screendead.minecraft.graphics.*;
-import org.lwjgl.*;
+import com.screendead.minecraft.graphics.Window;
+import org.lwjgl.Version;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 public class Minecraft {
     private Window window;
@@ -16,7 +17,7 @@ public class Minecraft {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         // Create the window
-        window = new Window("Minecraft", 1080, 720, false);
+        window = new Window("Minecraft", 1080, 720, true, true);
 
         // Start the game loop
         loop();

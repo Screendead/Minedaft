@@ -11,7 +11,7 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import static org.lwjgl.glfw.Callbacks.*;
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -23,8 +23,11 @@ public class Window {
     public Renderer renderer;
     private long monitor;
     private GLFWVidMode v;
+    private int vsync;
 
-    public Window(String title, int width, int height, boolean isFullscreen) {
+    public Window(String title, int width, int height, boolean isFullscreen, boolean vsyncEnabled) {
+        vsync = (vsyncEnabled) ? 1 : 0;
+
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -49,7 +52,7 @@ public class Window {
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_SAMPLES, 4096); // Enable MSAA
+        glfwWindowHint(GLFW_SAMPLES, 12); // Enable MSAA
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
@@ -73,6 +76,8 @@ public class Window {
         renderer.init();
 
         this.autoViewport();
+
+        glfwSwapInterval(vsync);
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(handle, (handle, key, scancode, action, mods) -> {
@@ -107,9 +112,6 @@ public class Window {
 
             // Toggle the window to fullscreen
             glfwSetWindowMonitor(handle, monitor, 0, 0, width, height, v.refreshRate());
-
-            // Enable v-sync
-            glfwSwapInterval(1);
         } else {
             width = initialWidth;
             height = initialHeight;
@@ -121,6 +123,8 @@ public class Window {
         }
 
         this.autoViewport();
+
+        glfwSwapInterval(vsync);
 
         toggleVisibility();
     }
@@ -141,8 +145,12 @@ public class Window {
      * Update the game
      */
     public void update(int start) {
+//        renderer.setTransform(0, 0, 0,
+//                0, (float) start, 0,
+//                1.0f, 1.0f, 1.0f);
+
         renderer.setTransform(0, 0, 0,
-                0, (float) start, 0,
+                0, 0, 0,
                 1.0f, 1.0f, 1.0f);
     }
 

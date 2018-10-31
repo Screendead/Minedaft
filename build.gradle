@@ -2,12 +2,7 @@ plugins {
     id 'java'
 }
 
-project.ext.lwjglVersion = "3.2.0"
-project.ext.jomlVersion = "1.9.11"
-project.ext.lwjglNatives = "natives-windows"
-
-group 'com.screendead.minecraft'
-version '1.0'
+version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -17,18 +12,30 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile "org.lwjgl:lwjgl:$lwjglVersion"
-    compile "org.lwjgl:lwjgl-assimp:$lwjglVersion"
-    compile "org.lwjgl:lwjgl-glfw:$lwjglVersion"
-    compile "org.lwjgl:lwjgl-openal:$lwjglVersion"
-    compile "org.lwjgl:lwjgl-opencl:$lwjglVersion"
-    compile "org.lwjgl:lwjgl-opengl:$lwjglVersion"
-    compile "org.lwjgl:lwjgl-stb:$lwjglVersion"
-    compile "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
-    compile "org.lwjgl:lwjgl-assimp:$lwjglVersion:$lwjglNatives"
-    compile "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
-    compile "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives"
-    compile "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
-    compile "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
-    compile "org.joml:joml:${jomlVersion}"
+    compile "org.lwjgl:lwjgl:3.2.0"
+    compile "org.lwjgl:lwjgl-assimp:3.2.0"
+    compile "org.lwjgl:lwjgl-glfw:3.2.0"
+    compile "org.lwjgl:lwjgl-openal:3.2.0"
+    compile "org.lwjgl:lwjgl-opencl:3.2.0"
+    compile "org.lwjgl:lwjgl-opengl:3.2.0"
+    compile "org.lwjgl:lwjgl-stb:3.2.0"
+    compile "org.lwjgl:lwjgl:3.2.0:natives-windows"
+    compile "org.lwjgl:lwjgl-assimp:3.2.0:natives-windows"
+    compile "org.lwjgl:lwjgl-glfw:3.2.0:natives-windows"
+    compile "org.lwjgl:lwjgl-openal:3.2.0:natives-windows"
+    compile "org.lwjgl:lwjgl-opengl:3.2.0:natives-windows"
+    compile "org.lwjgl:lwjgl-stb:3.2.0:natives-windows"
+    compile "org.joml:joml:1.9.11"
+}
+group 'minecraft'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }

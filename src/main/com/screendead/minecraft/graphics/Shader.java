@@ -12,8 +12,6 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL20.glUniform3f;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 public class Shader {
     private int program;
@@ -50,7 +48,8 @@ public class Shader {
 
         // Set locations for data to be sent to the vertex shader
         glBindAttribLocation(program, 0, "position");
-        glBindAttribLocation(program, 1, "textures");
+        glBindAttribLocation(program, 1, "normals");
+        glBindAttribLocation(program, 2, "textures");
 
         // Link and validate the shaders
         glLinkProgram(program);

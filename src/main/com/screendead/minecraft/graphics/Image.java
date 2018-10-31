@@ -8,8 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
@@ -25,7 +23,7 @@ public class Image {
             h = MemoryUtil.memAllocInt(1);
             channels = MemoryUtil.memAllocInt(1);
 
-            STBImage.stbi_set_flip_vertically_on_load(false);
+            STBImage.stbi_set_flip_vertically_on_load(true);
 
             // Load the texture
             ByteBuffer img = STBImage.stbi_load("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/" + source, w, h, channels, 4);
