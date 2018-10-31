@@ -12,6 +12,7 @@ public class Renderer {
     private Shader shader;
     private Mesh mesh;
     private Matrix4f view;
+    private Camera camera;
 
     public Renderer() {
         view = new Matrix4f();
@@ -23,6 +24,11 @@ public class Renderer {
     public void render() {
         // Clear the framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Update the camera in the shader
+        shader.bind();
+            shader.setUniform("camera", camera.getMatrix());
+        Shader.unbind();
 
         // Bind the shader
         shader.bind();
@@ -59,6 +65,7 @@ public class Renderer {
         shader = new Shader("basic");
         shader.addUniform("view");
         shader.addUniform("transform");
+        shader.addUniform("camera");
         shader.addUniform("tex");
 
         mesh = new Mesh(new float[] {
@@ -85,8 +92,17 @@ public class Renderer {
             shader.setUniform("tex", 0);
         Shader.unbind();
 
+        camera = new Camera();
+
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    /**
+     * Update the view matrix with the camera details
+     */
+    public void updateCamera(float dx, float dy) {
+        camera.update(dx, dy);
     }
 
     /**
@@ -99,9 +115,9 @@ public class Renderer {
         glViewport(0, 0, (int) width, (int) height);
 
         // Set the viewMatrix
-        view = new Matrix4f().perspective((float) Math.toRadians(70),
-                 width / height, 0.1f, 1000.0f)
-                .lookAt(new Vector3f(0, 1, 0), new Vector3f(0, 1, -1), new Vector3f(0, 1, 0));
+        view = new Matrix4f();
+        view.perspective((float) Math.toRadians(85.0f),
+                width / height, 0.1f, 1000.0f);
 
         // Update the viewMatrix in the shader
         shader.bind();

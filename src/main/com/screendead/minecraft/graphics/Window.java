@@ -1,5 +1,6 @@
 package com.screendead.minecraft.graphics;
 
+import com.screendead.minecraft.Input;
 import org.joml.Vector2i;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -17,6 +18,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
     private long handle;
+    private Input input;
     private boolean fullscreen = false, visible = false;
     private int initialWidth, initialHeight;
     private int width, height;
@@ -52,14 +54,16 @@ public class Window {
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_SAMPLES, 12); // Enable MSAA
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+        glfwWindowHint(GLFW_SAMPLES, 48); // Enable MSAA
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable
 
         // Create a handle for the window
         handle = glfwCreateWindow(width, height, title, NULL, NULL);
         if (handle == NULL)
             throw new RuntimeException("Failed to create the GLFW window.");
+
+        glfwSetInputMode(this.handle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); // The cursor will be hidden
 
         // Set the icon of the window
         setIcon("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
@@ -79,23 +83,9 @@ public class Window {
 
         glfwSwapInterval(vsync);
 
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(handle, (handle, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                glfwSetWindowShouldClose(handle, true); // We will detect this in the rendering loop
-            else if (key == GLFW_KEY_F11 && action == GLFW_RELEASE)
-                this.toggleFullscreen();
-        });
-
-        // Setup a resizing callback. Make sure the window behaves the way it should when resizing
-        glfwSetWindowSizeCallback(handle, (handle, w, h) -> {
-            this.width = w;
-            this.height = h;
-            this.autoViewport();
-            this.render();
-        });
-
         if (isFullscreen) toggleFullscreen();
+
+        input = new Input(this);
 
         // Make the window visible
         this.toggleVisibility();
@@ -144,14 +134,22 @@ public class Window {
     /**
      * Update the game
      */
-    public void update(int start) {
-//        renderer.setTransform(0, 0, 0,
-//                0, (float) start, 0,
-//                1.0f, 1.0f, 1.0f);
+    public void update(int ticks) {
+        if (input.keys[GLFW_KEY_ESCAPE])
+            glfwSetWindowShouldClose(handle, true);
+        else if (input.keys[GLFW_KEY_F11])
+            this.toggleFullscreen();
 
         renderer.setTransform(0, 0, 0,
                 0, 0, 0,
                 1.0f, 1.0f, 1.0f);
+    }
+
+    /**
+     * Update the camera
+     */
+    public void updateCamera(float dx, float dy) {
+        renderer.updateCamera(dx, dy);
     }
 
     /**
@@ -169,12 +167,23 @@ public class Window {
      */
     public void destroy() {
         // Free the window callbacks and destroy the window
-        glfwFreeCallbacks(handle);
+        input.dispose();
         glfwDestroyWindow(handle);
 
         // Terminate GLFW and free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
+    }
+
+    /**
+     * Set the size of the window
+     * @param width The new width
+     * @param height The new height
+     */
+    public void setSize(int width, int height) {
+        if (fullscreen) return;
+        glfwSetWindowSize(handle, width, height);
+        this.autoViewport();
     }
 
     /**
@@ -184,6 +193,7 @@ public class Window {
         Vector2i size = this.getSize();
 
         renderer.setViewport(size.x, size.y);
+        renderer.render();
     }
 
     /**
@@ -224,7 +234,7 @@ public class Window {
     /**
      * @return the size of the window in pixels
      */
-    private Vector2i getSize() {
+    public Vector2i getSize() {
         return new Vector2i(this.width, this.height);
     }
 
