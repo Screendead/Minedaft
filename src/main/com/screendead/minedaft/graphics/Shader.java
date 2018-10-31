@@ -1,4 +1,4 @@
-package com.screendead.minecraft.graphics;
+package com.screendead.minedaft.graphics;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -150,7 +150,7 @@ public class Shader {
         BufferedReader reader;
 
         try {
-            reader = new BufferedReader(new FileReader("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/shaders/" + filename));
+            reader = new BufferedReader(new FileReader("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/shaders/" + filename));
 
             String line;
             while ((line = reader.readLine()) != null) {

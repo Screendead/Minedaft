@@ -1,4 +1,4 @@
-package com.screendead.minecraft.graphics;
+package com.screendead.minedaft.graphics;
 
 import org.lwjgl.system.MemoryUtil;
 
@@ -109,7 +109,7 @@ public class Mesh {
         List<Integer> indices = new ArrayList<>();
 
         try {
-            reader = new BufferedReader(new FileReader("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/models/" + filename));
+            reader = new BufferedReader(new FileReader("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/models/" + filename));
 
             String line;
             while ((line = reader.readLine()) != null) {

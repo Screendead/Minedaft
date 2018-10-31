@@ -27,7 +27,7 @@ dependencies {
     compile "org.lwjgl:lwjgl-stb:3.2.0:natives-windows"
     compile "org.joml:joml:1.9.11"
 }
-group 'minecraft'
+group 'minedaft'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8

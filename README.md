@@ -1,6 +1,6 @@
-# Minecraft
+# Minedaft
 
-A low-budget adaptation of Minecraft with LWJGL and JOML. For science.
+A low-budget adaptation of Minedaft with LWJGL and JOML. For science.
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ If you can make sense of any of this, you're welcome to contribute.
 
 * **Jack Lusher** - *Everything So Far* - [Screendead](https://github.com/Screendead)
 
-See also the list of [contributors](https://github.com/Screendead/Minecraft/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/Screendead/Minedaft/contributors) who participated in this project.
 
 ## License
 

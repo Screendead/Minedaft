@@ -1,12 +1,12 @@
-package com.screendead.minecraft;
+package com.screendead.minedaft;
 
-import com.screendead.minecraft.graphics.Window;
+import com.screendead.minedaft.graphics.Window;
 import org.lwjgl.Version;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
-public class Minecraft {
+public class Minedaft {
     private Window window;
     private float UPS = 60.0f, FPS = 60.0f;
 
@@ -17,7 +17,7 @@ public class Minecraft {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         // Create the window
-        window = new Window("Minecraft", 1080, 720, true, true);
+        window = new Window("Minedaft", 1080, 720, true, true);
 
         // Start the game loop
         loop();
@@ -68,6 +68,6 @@ public class Minecraft {
 
     public static void main(String[] args) {
         // Create an instance and start the Game Loop
-        new Minecraft().run();
+        new Minedaft().run();
     }
 }

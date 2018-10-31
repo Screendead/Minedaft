@@ -1,8 +1,8 @@
-package com.screendead.minecraft;
+package com.screendead.minedaft;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import com.screendead.minecraft.graphics.Window;
+import com.screendead.minedaft.graphics.Window;
 import org.joml.Vector2i;
 import org.lwjgl.glfw.*;
 

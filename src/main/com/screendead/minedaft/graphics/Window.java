@@ -1,6 +1,6 @@
-package com.screendead.minecraft.graphics;
+package com.screendead.minedaft.graphics;
 
-import com.screendead.minecraft.Input;
+import com.screendead.minedaft.Input;
 import org.joml.Vector2i;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -66,7 +66,7 @@ public class Window {
         glfwSetInputMode(this.handle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); // The cursor will be hidden
 
         // Set the icon of the window
-        setIcon("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/heart.png");
+        setIcon("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/img/heart.png");
 
         // Set the window size limits
         int minSize = 200;

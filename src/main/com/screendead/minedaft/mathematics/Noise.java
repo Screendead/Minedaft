@@ -1,4 +1,4 @@
-package com.screendead.minecraft.mathematics;
+package com.screendead.minedaft.mathematics;
 
 public class Noise {
     private static int SEED;

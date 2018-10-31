@@ -1,4 +1,4 @@
-package com.screendead.minecraft.graphics;
+package com.screendead.minedaft.graphics;
 
 import org.joml.Vector2i;
 import org.lwjgl.stb.STBImage;
@@ -26,7 +26,7 @@ public class Image {
             STBImage.stbi_set_flip_vertically_on_load(true);
 
             // Load the texture
-            ByteBuffer img = STBImage.stbi_load("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minecraft/res/img/" + source, w, h, channels, 4);
+            ByteBuffer img = STBImage.stbi_load("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/img/" + source, w, h, channels, 4);
             if (img == null) throw new RuntimeException("Texture " + source + " failed to load.");
 
             // Store width and height values
