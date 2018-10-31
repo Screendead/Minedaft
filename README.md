@@ -1,6 +1,6 @@
 # Minedaft
 
-A low-budget adaptation of Minedaft with LWJGL and JOML. For science.
+A low-budget adaptation of Minecraft with LWJGL and JOML. For science.
 
 ## Getting Started
 
