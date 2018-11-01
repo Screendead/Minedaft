@@ -27,9 +27,9 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Mesh {
+    private static Image texture;
     private static ArrayList<Integer> vboList = new ArrayList<>();
     private final int vao, vertexCount;
-    private Image texture = null;
 
     public Mesh(float[] positions, float[] texCoords, int[] indices) {
         FloatBuffer vertBuffer = null, texBuffer = null;
@@ -98,98 +98,6 @@ public class Mesh {
         }
     }
 
-    /*
-    public static Mesh load(String filename) {
-        BufferedReader reader;
-
-        List<Float> positions = new ArrayList<>();
-        List<Float> normals = new ArrayList<>();
-        List<Float> texCoords = new ArrayList<>();
-
-        List<Integer> indices = new ArrayList<>();
-
-        try {
-            reader = new BufferedReader(new FileReader("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/models/" + filename));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split("\\s+");
-
-                switch (tokens[0]) {
-                    case "v":
-                        positions.add(Float.parseFloat(tokens[1]));
-                        positions.add(Float.parseFloat(tokens[2]));
-                        positions.add(Float.parseFloat(tokens[3]));
-                        System.out.println("Added vertex");
-                        break;
-                    case "vn":
-                        normals.add(Float.parseFloat(tokens[1]));
-                        normals.add(Float.parseFloat(tokens[1]));
-                        normals.add(Float.parseFloat(tokens[1]));
-                        System.out.println("Added normal");
-                        break;
-                    case "vt":
-                        texCoords.add(Float.parseFloat(tokens[1]));
-                        texCoords.add(Float.parseFloat(tokens[2]));
-                        System.out.println("Added texture coord");
-                        break;
-                    case "f":
-                        String[][] iTokens = new String[][] {
-                                tokens[1].split("/"),
-                                tokens[2].split("/"),
-                                tokens[3].split("/")
-                        };
-
-//                        // Vertex 1 data
-//                        indices.add(Integer.parseInt(iTokens[0][0]) - 1);
-//                        indices.add(Integer.parseInt(iTokens[0][1]) - 1);
-//                        indices.add(Integer.parseInt(iTokens[0][2]) - 1);
-//
-//                        // Vertex 2 data
-//                        indices.add(Integer.parseInt(iTokens[1][0]) - 1);
-//                        indices.add(Integer.parseInt(iTokens[1][1]) - 1);
-//                        indices.add(Integer.parseInt(iTokens[1][2]) - 1);
-//
-//                        // Vertex 3 data
-//                        indices.add(Integer.parseInt(iTokens[2][0]) - 1);
-//                        indices.add(Integer.parseInt(iTokens[2][1]) - 1);
-//                        indices.add(Integer.parseInt(iTokens[2][2]) - 1);
-
-                        indices.add(Integer.parseInt(iTokens[0][0]) - 1);
-                        indices.add(Integer.parseInt(iTokens[1][0]) - 1);
-                        indices.add(Integer.parseInt(iTokens[2][0]) - 1);
-
-                        indices.add(Integer.parseInt(iTokens[0][1]) - 1);
-                        indices.add(Integer.parseInt(iTokens[1][1]) - 1);
-                        indices.add(Integer.parseInt(iTokens[2][1]) - 1);
-
-                        indices.add(Integer.parseInt(iTokens[0][2]) - 1);
-                        indices.add(Integer.parseInt(iTokens[1][2]) - 1);
-                        indices.add(Integer.parseInt(iTokens[2][2]) - 1);
-
-                        System.out.println("Added indices");
-                        break;
-                }
-            }
-            reader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
-        float[] p = new float[positions.size()],
-                n = new float[normals.size()],
-                t = new float[texCoords.size()];
-        int[] i = new int[indices.size()];
-
-        for (int j = 0; j < positions.size(); j++) p[j] = positions.get(j);
-        for (int j = 0; j < normals.size(); j++) n[j] = normals.get(j);
-        for (int j = 0; j < texCoords.size(); j++) t[j] = texCoords.get(j);
-        for (int j = 0; j < indices.size(); j++) i[j] = indices.get(j);
-
-        return new Mesh(p, n, t, i);
-    }
-    */
-
     /**
      * Clean the memory after removal
      */
@@ -202,16 +110,13 @@ public class Mesh {
             glDeleteBuffers(vboId);
         }
 
-        // Delete the texture
-        texture.cleanup();
-
         // Delete the VAO
         glBindVertexArray(0);
         glDeleteVertexArrays(vao);
     }
 
-    public void setTexture(Image texture) {
-        this.texture = texture;
+    public static void setGlobalTexture(Image t) {
+        texture = t;
     }
 
     /**

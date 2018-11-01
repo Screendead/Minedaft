@@ -1,14 +1,17 @@
 package com.screendead.minedaft.graphics;
 
+import com.screendead.minedaft.world.Block;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 
+import static com.screendead.minedaft.world.BlockType.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 
 public class Renderer {
     private Image texture;
     private Shader shader;
+    private Block block;
     private Mesh mesh;
     private Matrix4f view;
     private int width, height;
@@ -29,19 +32,19 @@ public class Renderer {
             shader.setUniform("camera", camera.getMatrix());
         Shader.unbind();
 
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
-                for (int k = -16; k < 0; k++) {
-                    setTransform(i, k, j, 0, 0, 0, 1, 1, 1);
+//        for (int i = 0; i < 16; i++) {
+//            for (int j = 0; j < 16; j++) {
+//                for (int k = -16; k < 0; k++) {
+//                    setTransform(i, k, j, 0, 0, 0, 1, 1, 1);
                     // Bind the shader
                     shader.bind();
                         // Render the mesh
                         mesh.render();
                     // Unbind the shader
                     Shader.unbind();
-                }
-            }
-        }
+//                }
+//            }
+//        }
     }
 
     /**
@@ -67,82 +70,16 @@ public class Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Create texture and shader
-        texture = new Image("grassblock.png");
+        Mesh.setGlobalTexture(new Image("grassblock.png"));
         shader = new Shader("basic");
         shader.addUniform("view");
         shader.addUniform("transform");
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        mesh = new Mesh(new float[] {
-                0.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 1.0f,
-                1.0f, 0.0f, 1.0f,
-                1.0f, 1.0f, 1.0f,
-
-                1.0f, 0.0f, 0.0f,
-                1.0f, 1.0f, 0.0f,
-                0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f,
-
-                1.0f, 0.0f, 1.0f,
-                1.0f, 1.0f, 1.0f,
-                1.0f, 0.0f, 0.0f,
-                1.0f, 1.0f, 0.0f,
-
-                0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f,
-                0.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 1.0f,
-
-                0.0f, 1.0f, 0.0f,
-                1.0f, 1.0f, 0.0f,
-                0.0f, 1.0f, 1.0f,
-                1.0f, 1.0f, 1.0f,
-
-                0.0f, 0.0f, 1.0f,
-                1.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f,
-        }, new float[] {
-                0.5f, 0.5f,
-                0.5f, 1.0f,
-                0.0f, 0.5f,
-                0.0f, 1.0f,
-
-                0.5f, 0.5f,
-                0.5f, 1.0f,
-                0.0f, 0.5f,
-                0.0f, 1.0f,
-
-                0.5f, 0.5f,
-                0.5f, 1.0f,
-                0.0f, 0.5f,
-                0.0f, 1.0f,
-
-                0.5f, 0.5f,
-                0.5f, 1.0f,
-                0.0f, 0.5f,
-                0.0f, 1.0f,
-
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.0f,
-                0.5f, 0.5f,
-
-                0.5f, 1.0f,
-                1.0f, 1.0f,
-                0.5f, 0.5f,
-                1.0f, 0.5f,
-        }, new int[] {
-                0, 2, 1, 1, 2, 3,
-                4, 6, 5, 5, 6, 7,
-                8, 10, 9, 9, 10, 11,
-                12, 14, 13, 13, 14, 15,
-                16, 18, 17, 17, 18, 19,
-                20, 22, 21, 21, 22, 23
-        });
-        mesh.setTexture(texture);
+        block = new Block(GRASS);
+        for (int i = 0; i < 6; i++) block.showFace(i);
+        mesh = block.getMeshComponent().toMesh();
 
         // Set the sampler2D to 0
         shader.bind();
@@ -167,7 +104,7 @@ public class Renderer {
 
         // Set the viewMatrix
         view = new Matrix4f();
-        view.perspective((float) Math.toRadians(120.0f),
+        view.perspective((float) Math.toRadians(100.0f),
                 width / height, 0.1f, 1000.0f);
 
         // Update the viewMatrix in the shader

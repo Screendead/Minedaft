@@ -80,7 +80,7 @@ public class Window {
         glfwMakeContextCurrent(handle);
         renderer.init();
 
-        camera = new Camera(new Vector3f(0, 2, 0));
+        camera = new Camera(new Vector3f(0, 0, 3));
 
         this.autoViewport();
 

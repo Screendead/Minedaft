@@ -32,8 +32,8 @@ public class Camera {
     }
 
     public void update(float dx, float dy) {
-        horizontal += -dx / 15.0f;
-        vertical += (dy * 2) / 15.0f;
+        horizontal += -dx / 12.0f;
+        vertical += (dy * 2) / 12.0f;
 
         horizontal = horizontal % 360.0f;
         vertical = constrain(vertical, -89.99f, 89.99f);
