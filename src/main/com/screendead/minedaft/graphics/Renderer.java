@@ -29,12 +29,19 @@ public class Renderer {
             shader.setUniform("camera", camera.getMatrix());
         Shader.unbind();
 
-        // Bind the shader
-        shader.bind();
-            // Render the mesh
-            mesh.render();
-        // Unbind the shader
-        Shader.unbind();
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                for (int k = -16; k < 0; k++) {
+                    setTransform(i, k, j, 0, 0, 0, 1, 1, 1);
+                    // Bind the shader
+                    shader.bind();
+                        // Render the mesh
+                        mesh.render();
+                    // Unbind the shader
+                    Shader.unbind();
+                }
+            }
+        }
     }
 
     /**
@@ -68,35 +75,35 @@ public class Renderer {
         shader.addUniform("tex");
 
         mesh = new Mesh(new float[] {
-                -1.0f, -1.0f,  1.0f,
-                -1.0f,  1.0f,  1.0f,
-                 1.0f, -1.0f,  1.0f,
-                 1.0f,  1.0f,  1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 1.0f, 1.0f,
+                1.0f, 0.0f, 1.0f,
+                1.0f, 1.0f, 1.0f,
 
-                 1.0f, -1.0f, -1.0f,
-                 1.0f,  1.0f, -1.0f,
-                -1.0f, -1.0f, -1.0f,
-                -1.0f,  1.0f, -1.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
 
-                 1.0f, -1.0f,  1.0f,
-                 1.0f,  1.0f,  1.0f,
-                 1.0f, -1.0f, -1.0f,
-                 1.0f,  1.0f, -1.0f,
+                1.0f, 0.0f, 1.0f,
+                1.0f, 1.0f, 1.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 1.0f, 0.0f,
 
-                -1.0f, -1.0f, -1.0f,
-                -1.0f,  1.0f, -1.0f,
-                -1.0f, -1.0f,  1.0f,
-                -1.0f,  1.0f,  1.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 1.0f, 1.0f,
 
-                -1.0f,  1.0f, -1.0f,
-                 1.0f,  1.0f, -1.0f,
-                -1.0f,  1.0f,  1.0f,
-                 1.0f,  1.0f,  1.0f,
+                0.0f, 1.0f, 0.0f,
+                1.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 1.0f,
+                1.0f, 1.0f, 1.0f,
 
-                -1.0f, -1.0f,  1.0f,
-                 1.0f, -1.0f,  1.0f,
-                -1.0f, -1.0f, -1.0f,
-                 1.0f, -1.0f, -1.0f,
+                0.0f, 0.0f, 1.0f,
+                1.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
         }, new float[] {
                 0.5f, 0.5f,
                 0.5f, 1.0f,
@@ -160,7 +167,7 @@ public class Renderer {
 
         // Set the viewMatrix
         view = new Matrix4f();
-        view.perspective((float) Math.toRadians(90.0f),
+        view.perspective((float) Math.toRadians(120.0f),
                 width / height, 0.1f, 1000.0f);
 
         // Update the viewMatrix in the shader

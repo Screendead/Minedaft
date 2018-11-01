@@ -38,7 +38,7 @@ public class Camera {
         horizontal = horizontal % 360.0f;
         vertical = constrain(vertical, -89.99f, 89.99f);
 
-        this.look = new Vector3f(0, 0, -1).rotateAxis((float) Math.toRadians(horizontal), up.x, up.y, up.z);
+        this.look = new Vector3f(0, 0, 1).rotateAxis((float) Math.toRadians(horizontal), up.x, up.y, up.z);
 
         up.cross(look, right);
         right.normalize();

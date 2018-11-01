@@ -55,7 +55,7 @@ public class Window {
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_SAMPLES, 48); // Enable MSAA
+//        glfwWindowHint(GLFW_SAMPLES, 4); // Enable MSAA
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable
 
@@ -80,7 +80,7 @@ public class Window {
         glfwMakeContextCurrent(handle);
         renderer.init();
 
-        camera = new Camera(new Vector3f(0, 0, 8));
+        camera = new Camera(new Vector3f(0, 2, 0));
 
         this.autoViewport();
 
