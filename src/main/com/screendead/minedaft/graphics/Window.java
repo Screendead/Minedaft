@@ -2,6 +2,7 @@ package com.screendead.minedaft.graphics;
 
 import com.screendead.minedaft.Input;
 import org.joml.Vector2i;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -12,7 +13,6 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -26,6 +26,7 @@ public class Window {
     private long monitor;
     private GLFWVidMode v;
     private int vsync;
+    private Camera camera;
 
     public Window(String title, int width, int height, boolean isFullscreen, boolean vsyncEnabled) {
         vsync = (vsyncEnabled) ? 1 : 0;
@@ -78,6 +79,8 @@ public class Window {
         // Make the OpenGL context current
         glfwMakeContextCurrent(handle);
         renderer.init();
+
+        camera = new Camera(new Vector3f(0, 0, 8));
 
         this.autoViewport();
 
@@ -140,23 +143,47 @@ public class Window {
         else if (input.keys[GLFW_KEY_F11])
             this.toggleFullscreen();
 
+        if (key(GLFW_KEY_W))
+            camera.move((key(GLFW_KEY_LEFT_CONTROL)) ? 2 : 1, 0, 0);
+        if (key(GLFW_KEY_A))
+            camera.move(0, 0, 1);
+        if (key(GLFW_KEY_S))
+            camera.move(-1, 0, 0);
+        if (key(GLFW_KEY_D))
+            camera.move(0, 0, -1);
+        if (key(GLFW_KEY_SPACE))
+            camera.move(0, 1, 0);
+        if (key(GLFW_KEY_LEFT_SHIFT))
+            camera.move(0, -1, 0);
+
+        updateCamera(input.dx, input.dy);
+        input.dx = input.dy = 0;
+
         renderer.setTransform(0, 0, 0,
                 0, 0, 0,
                 1.0f, 1.0f, 1.0f);
     }
 
     /**
-     * Update the camera
+     * Helper method for GLFW input keys
+     * @param key The GLFW key ID
+     */
+    public boolean key(int key) {
+        return input.keys[key];
+    }
+
+    /**
+     * Update the view matrix with the camera details
      */
     public void updateCamera(float dx, float dy) {
-        renderer.updateCamera(dx, dy);
+        camera.update(dx, dy);
     }
 
     /**
      * Use the renderer to draw to the window
      */
     public void render() {
-        renderer.render();
+        renderer.render(camera);
 
         // Draw buffer to the screen
         glfwSwapBuffers(handle);
@@ -193,7 +220,7 @@ public class Window {
         Vector2i size = this.getSize();
 
         renderer.setViewport(size.x, size.y);
-        renderer.render();
+        renderer.render(camera);
     }
 
     /**

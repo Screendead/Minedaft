@@ -74,8 +74,6 @@ public class Input {
 
         dx = xpos - x;
         dy = ypos - y;
-
-        window.updateCamera(dx, dy);
     }
 
     private void onMouseScroll(double xoffset, double yoffset) {

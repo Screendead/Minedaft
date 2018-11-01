@@ -1,7 +1,6 @@
 package com.screendead.minedaft.graphics;
 
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -12,7 +11,7 @@ public class Renderer {
     private Shader shader;
     private Mesh mesh;
     private Matrix4f view;
-    private Camera camera;
+    private int width, height;
 
     public Renderer() {
         view = new Matrix4f();
@@ -21,7 +20,7 @@ public class Renderer {
     /**
      * Render to the framebuffer
      */
-    public void render() {
+    public void render(Camera camera) {
         // Clear the framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -61,7 +60,7 @@ public class Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Create texture and shader
-        texture = new Image("grass.png");
+        texture = new Image("grassblock.png");
         shader = new Shader("basic");
         shader.addUniform("view");
         shader.addUniform("transform");
@@ -69,21 +68,72 @@ public class Renderer {
         shader.addUniform("tex");
 
         mesh = new Mesh(new float[] {
-//                -0.5f, -0.5f,  0.0f,
-//                -0.5f,  0.5f,  0.0f,
-//                 0.5f, -0.5f,  0.0f,
-//                 0.5f,  0.5f,  0.0f
-                -4.0f, 0.0f, -4.0f,
-                -4.0f, 0.0f,  4.0f,
-                 4.0f, 0.0f, -4.0f,
-                 4.0f, 0.0f,  4.0f,
+                -1.0f, -1.0f,  1.0f,
+                -1.0f,  1.0f,  1.0f,
+                 1.0f, -1.0f,  1.0f,
+                 1.0f,  1.0f,  1.0f,
+
+                 1.0f, -1.0f, -1.0f,
+                 1.0f,  1.0f, -1.0f,
+                -1.0f, -1.0f, -1.0f,
+                -1.0f,  1.0f, -1.0f,
+
+                 1.0f, -1.0f,  1.0f,
+                 1.0f,  1.0f,  1.0f,
+                 1.0f, -1.0f, -1.0f,
+                 1.0f,  1.0f, -1.0f,
+
+                -1.0f, -1.0f, -1.0f,
+                -1.0f,  1.0f, -1.0f,
+                -1.0f, -1.0f,  1.0f,
+                -1.0f,  1.0f,  1.0f,
+
+                -1.0f,  1.0f, -1.0f,
+                 1.0f,  1.0f, -1.0f,
+                -1.0f,  1.0f,  1.0f,
+                 1.0f,  1.0f,  1.0f,
+
+                -1.0f, -1.0f,  1.0f,
+                 1.0f, -1.0f,  1.0f,
+                -1.0f, -1.0f, -1.0f,
+                 1.0f, -1.0f, -1.0f,
         }, new float[] {
-                0.0f, 0.0f,
+                0.5f, 0.5f,
+                0.5f, 1.0f,
+                0.0f, 0.5f,
                 0.0f, 1.0f,
-                1.0f, 0.0f,
-                1.0f, 1.0f
+
+                0.5f, 0.5f,
+                0.5f, 1.0f,
+                0.0f, 0.5f,
+                0.0f, 1.0f,
+
+                0.5f, 0.5f,
+                0.5f, 1.0f,
+                0.0f, 0.5f,
+                0.0f, 1.0f,
+
+                0.5f, 0.5f,
+                0.5f, 1.0f,
+                0.0f, 0.5f,
+                0.0f, 1.0f,
+
+                0.0f, 0.0f,
+                0.0f, 0.5f,
+                0.5f, 0.0f,
+                0.5f, 0.5f,
+
+                0.5f, 1.0f,
+                1.0f, 1.0f,
+                0.5f, 0.5f,
+                1.0f, 0.5f,
         }, new int[] {
-                0, 1, 2, 2, 1, 3
+                0, 2, 1, 1, 2, 3,
+                4, 6, 5, 5, 6, 7,
+                8, 10, 9, 9, 10, 11,
+                12, 14, 13, 13, 14, 15,
+                16, 18, 17, 17, 18, 19,
+                20, 22, 21, 21, 22, 23
         });
         mesh.setTexture(texture);
 
@@ -92,17 +142,8 @@ public class Renderer {
             shader.setUniform("tex", 0);
         Shader.unbind();
 
-        camera = new Camera();
-
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    }
-
-    /**
-     * Update the view matrix with the camera details
-     */
-    public void updateCamera(float dx, float dy) {
-        camera.update(dx, dy);
     }
 
     /**
@@ -111,12 +152,15 @@ public class Renderer {
      * @param height The window height
      */
     public void setViewport(float width, float height) {
+        this.width = (int) width;
+        this.height = (int) height;
+
         // Set the viewport
         glViewport(0, 0, (int) width, (int) height);
 
         // Set the viewMatrix
         view = new Matrix4f();
-        view.perspective((float) Math.toRadians(85.0f),
+        view.perspective((float) Math.toRadians(90.0f),
                 width / height, 0.1f, 1000.0f);
 
         // Update the viewMatrix in the shader
