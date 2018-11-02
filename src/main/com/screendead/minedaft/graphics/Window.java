@@ -7,6 +7,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
@@ -55,7 +56,7 @@ public class Window {
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
-//        glfwWindowHint(GLFW_SAMPLES, 4); // Enable MSAA
+        glfwWindowHint(GLFW_SAMPLES, 16); // Enable MSAA
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable
         glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE); // The window will be alt-tabbable without iconifying
@@ -81,7 +82,7 @@ public class Window {
         glfwMakeContextCurrent(handle);
         renderer.init();
 
-        camera = new Camera(new Vector3f(0, 0, 3));
+        camera = new Camera(new Vector3f(0, 66, 0));
 
         this.autoViewport();
 
@@ -157,7 +158,7 @@ public class Window {
         if (key(GLFW_KEY_LEFT_SHIFT))
             camera.move(0, -1, 0);
 
-        updateCamera(input.dx, input.dy);
+        camera.update(input.dx, input.dy);
         input.dx = input.dy = 0;
 
         renderer.setTransform(0, 0, 0,
@@ -171,13 +172,6 @@ public class Window {
      */
     public boolean key(int key) {
         return input.keys[key];
-    }
-
-    /**
-     * Update the view matrix with the camera details
-     */
-    public void updateCamera(float dx, float dy) {
-        camera.update(dx, dy);
     }
 
     /**
@@ -196,6 +190,7 @@ public class Window {
     public void destroy() {
         // Free the window callbacks and destroy the window
         input.dispose();
+        renderer.cleanup();
         glfwDestroyWindow(handle);
 
         // Terminate GLFW and free the error callback

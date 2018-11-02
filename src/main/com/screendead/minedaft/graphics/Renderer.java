@@ -1,8 +1,7 @@
 package com.screendead.minedaft.graphics;
 
-import com.screendead.minedaft.world.Block;
-import com.screendead.minedaft.world.BlockType;
 import com.screendead.minedaft.world.Chunk;
+import com.screendead.minedaft.world.World;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 
@@ -10,16 +9,12 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 
 public class Renderer {
-    private Image texture;
     private Shader shader;
-    private Chunk chunk;
-    private Mesh mesh;
-    private Matrix4f view;
-    private int width, height;
+    private World world;
+    private Matrix4f view = new Matrix4f();
+    private float fov = 100.0f;
 
-    public Renderer() {
-        view = new Matrix4f();
-    }
+    public Renderer() { }
 
     /**
      * Render to the framebuffer
@@ -35,7 +30,7 @@ public class Renderer {
 
         // Render the chunk mesh
         shader.bind();
-            mesh.render();
+            world.render();
         Shader.unbind();
     }
 
@@ -69,8 +64,7 @@ public class Renderer {
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        chunk = new Chunk(0, 0);
-        mesh = chunk.toMesh();
+        world = new World(8, 8);
 
         // Set the sampler2D to 0
         shader.bind();
@@ -87,15 +81,12 @@ public class Renderer {
      * @param height The window height
      */
     public void setViewport(float width, float height) {
-        this.width = (int) width;
-        this.height = (int) height;
-
         // Set the viewport
         glViewport(0, 0, (int) width, (int) height);
 
         // Set the viewMatrix
         view = new Matrix4f();
-        view.perspective((float) Math.toRadians(100.0f),
+        view.perspective((float) Math.toRadians(fov),
                 width / height, 0.1f, 16.0f * 24.0f);
 
         // Update the viewMatrix in the shader
@@ -123,5 +114,9 @@ public class Renderer {
                     .rotateYXZ((float) Math.toRadians(ry), (float) Math.toRadians(rx), (float) Math.toRadians(rz))
                     .scale(sx, sy, sz));
         Shader.unbind();
+    }
+
+    public void cleanup() {
+        world.cleanup();
     }
 }

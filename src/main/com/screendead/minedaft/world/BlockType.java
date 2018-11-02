@@ -74,20 +74,29 @@ public enum BlockType {
             }
     };
 
-    private static int[][] indices = new int[][] {
-            new int[] { // +Z
-                    0, 2, 1, 1, 2, 3
-            }, new int[] { // -Z
-                    4, 6, 5, 5, 6, 7
-            }, new int[] { // +X
-                    8, 10, 9, 9, 10, 11
-            }, new int[] { // -X
-                    12, 14, 13, 13, 14, 15
-            }, new int[] { // +Y
-                    16, 18, 17, 17, 18, 19
-            }, new int[] { // -Y
-                    20, 22, 21, 21, 22, 23
-            }
+//    private static int[][] indices = new int[][] {
+//            new int[] { // +Z
+//                    0, 2, 1, 1, 2, 3
+//            }, new int[] { // -Z
+//                    4, 6, 5, 5, 6, 7
+//            }, new int[] { // +X
+//                    8, 10, 9, 9, 10, 11
+//            }, new int[] { // -X
+//                    12, 14, 13, 13, 14, 15
+//            }, new int[] { // +Y
+//                    16, 18, 17, 17, 18, 19
+//            }, new int[] { // -Y
+//                    20, 22, 21, 21, 22, 23
+//            }
+//    };
+
+    private static int[] indices = new int[] {
+            0, 2, 1, 1, 2, 3,
+            4, 6, 5, 5, 6, 7,
+            8, 10, 9, 9, 10, 11,
+            12, 14, 13, 13, 14, 15,
+            16, 18, 17, 17, 18, 19,
+            20, 22, 21, 21, 22, 23
     };
 
     private int id;
@@ -102,10 +111,10 @@ public enum BlockType {
 
     public MeshComponent getMeshComponent(boolean[] faces, int x, int y, int z) {
         ArrayList<Integer> index = new ArrayList<>();
-        for (int i = 0; i < faces.length; i++) if (faces[i]) index.add(i);
+        for (int i = 0; i < 6; i++) if (faces[i]) index.add(i);
 
-        float[] v = new float[index.size() * 12 * 2];
-        float[] t = new float[index.size() * 8 * 2];
+        float[] v = new float[index.size() * 12];
+        float[] t = new float[index.size() * 8];
         int[] mi = new int[index.size() * 6];
 
         for (int i = 0; i < index.size(); i++) {
@@ -120,9 +129,7 @@ public enum BlockType {
                 t[i * 8 + j] = texCoords[position][j];
             }
 
-            for (int j = 0; j < 6; j++) {
-                mi[i * 6 + j] = indices[position][j];
-            }
+            for (int j = 0; j < index.size() * 6; j++) mi[j] = indices[j];
         }
 
         return new MeshComponent(v, t, mi);

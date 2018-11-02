@@ -71,6 +71,7 @@ public class Mesh {
         } finally {
             if (vertBuffer != null) MemoryUtil.memFree(vertBuffer);
             if (texBuffer != null) MemoryUtil.memFree(texBuffer);
+            if (indicesBuffer != null) MemoryUtil.memFree(indicesBuffer);
         }
     }
 
