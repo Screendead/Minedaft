@@ -19,14 +19,16 @@ public class Chunk {
         this.cz = cz;
 
         float scale = 0.02f;
+        float dScale = 0.05f;
 
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 float x = (float) (i + (cx << 4)) * scale, z = (float) (j + (cz << 4)) * scale;
-                float height = 64 + 16 * STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0);
+                float height = 32 + 16 * STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0);
                 for (int k = 0; k < 256; k++) {
                     int index = flatten(i, j, k);
-                    blocks[index] = new Block((k < height) ? BlockType.GRASS : BlockType.AIR, new Vector3i(i + (cx << 4), k, j + (cz << 4)));
+                    float detail = 32 * STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0);
+                    blocks[index] = new Block((k < (height + detail)) ? BlockType.GRASS : BlockType.AIR, new Vector3i(i + (cx << 4), k, j + (cz << 4)));
 //                    blocks[index] = new Block(BlockType.GRASS, new Vector3i(i + (cx << 4), k, j + (cz << 4)));
                 }
             }

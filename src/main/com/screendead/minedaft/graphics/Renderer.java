@@ -64,7 +64,7 @@ public class Renderer {
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        world = new World(8, 8);
+        world = new World(20, 20);
 
         // Set the sampler2D to 0
         shader.bind();
