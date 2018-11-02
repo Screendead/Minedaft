@@ -6,9 +6,13 @@ import org.joml.Vector3i;
 import org.lwjgl.stb.STBPerlin;
 
 public class Chunk {
+    public static final Chunk EMPTY = new Chunk();
+
     public int cx, cz;
     private Block[] blocks = new Block[65536];
     private Mesh mesh = null;
+    private boolean empty = false;
+    private Chunk posX, negX, posZ, negZ;
 
     public Chunk(int cx, int cz) {
         this.cx = cx;
@@ -29,13 +33,20 @@ public class Chunk {
         }
     }
 
-    public void render() {
-        if (mesh == null) generateMesh();
+    public Chunk() {
+        this.empty = true;
+    }
 
+    public void render() {
         mesh.render();
     }
 
-    public void generateMesh() {
+    public void generateMesh(Chunk posX, Chunk negX, Chunk posZ, Chunk negZ) {
+        this.posX = posX;
+        this.negX = negX;
+        this.posZ = posZ;
+        this.negZ = negZ;
+
         MeshComponent m = new MeshComponent(new float[] {}, new float[] {}, new int[] {});
 
         for (int k = 0; k < 256; k++) {
@@ -71,7 +82,12 @@ public class Chunk {
     }
 
     private int getBlock(int x, int y, int z) {
-        if ((x < 0) || (x > 15) || (y < 0) || (y > 255) || (z < 0) || (z > 15)) return BlockType.AIR.getID();
+//        if ((x < 0) || (x > 15) || (y < 0) || (y > 255) || (z < 0) || (z > 15)) return BlockType.AIR.getID();
+        if (this.empty || (y == -1) || (y == 256)) return BlockType.AIR.getID();
+        if (x == 16) return posX.getBlock(0, y, z);
+        if (x == -1) return negX.getBlock(15, y, z);
+        if (z == 16) return posZ.getBlock(x, y, 0);
+        if (z == -1) return negZ.getBlock(x, y, 15);
         return blocks[flatten(x, z, y)].getID();
     }
 
