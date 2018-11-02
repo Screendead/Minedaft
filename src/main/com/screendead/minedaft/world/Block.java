@@ -1,6 +1,7 @@
 package com.screendead.minedaft.world;
 
 import com.screendead.minedaft.graphics.MeshComponent;
+import org.joml.Vector3i;
 
 public class Block {
     public boolean[] faces = new boolean[] {
@@ -13,9 +14,11 @@ public class Block {
     };
 
     private BlockType type;
+    private Vector3i position;
 
-    public Block(BlockType type) {
+    public Block(BlockType type, Vector3i position) {
         this.type = type;
+        this.position = position;
     }
 
     public void showFace(int index) {
@@ -27,7 +30,7 @@ public class Block {
     }
 
     public MeshComponent getMeshComponent() {
-        return type.getMeshComponent(faces);
+        return type.getMeshComponent(faces, position.x, position.y, position.z);
     }
 
     public int getID() {

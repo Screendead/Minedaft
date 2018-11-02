@@ -1,17 +1,18 @@
 package com.screendead.minedaft.graphics;
 
 import com.screendead.minedaft.world.Block;
+import com.screendead.minedaft.world.BlockType;
+import com.screendead.minedaft.world.Chunk;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 
-import static com.screendead.minedaft.world.BlockType.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 
 public class Renderer {
     private Image texture;
     private Shader shader;
-    private Block block;
+    private Chunk chunk;
     private Mesh mesh;
     private Matrix4f view;
     private int width, height;
@@ -32,19 +33,10 @@ public class Renderer {
             shader.setUniform("camera", camera.getMatrix());
         Shader.unbind();
 
-//        for (int i = 0; i < 16; i++) {
-//            for (int j = 0; j < 16; j++) {
-//                for (int k = -16; k < 0; k++) {
-//                    setTransform(i, k, j, 0, 0, 0, 1, 1, 1);
-                    // Bind the shader
-                    shader.bind();
-                        // Render the mesh
-                        mesh.render();
-                    // Unbind the shader
-                    Shader.unbind();
-//                }
-//            }
-//        }
+        // Render the chunk mesh
+        shader.bind();
+            mesh.render();
+        Shader.unbind();
     }
 
     /**
@@ -77,9 +69,8 @@ public class Renderer {
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        block = new Block(GRASS);
-        for (int i = 0; i < 6; i++) block.showFace(i);
-        mesh = block.getMeshComponent().toMesh();
+        chunk = new Chunk(0, 0);
+        mesh = chunk.toMesh();
 
         // Set the sampler2D to 0
         shader.bind();
@@ -105,7 +96,7 @@ public class Renderer {
         // Set the viewMatrix
         view = new Matrix4f();
         view.perspective((float) Math.toRadians(100.0f),
-                width / height, 0.1f, 1000.0f);
+                width / height, 0.1f, 16.0f * 24.0f);
 
         // Update the viewMatrix in the shader
         shader.bind();

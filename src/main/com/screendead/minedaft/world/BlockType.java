@@ -5,7 +5,8 @@ import com.screendead.minedaft.graphics.MeshComponent;
 import java.util.ArrayList;
 
 public enum BlockType {
-    GRASS(0, "grass", new float[][] {
+    AIR(0, "air", new float[][] {}),
+    GRASS(1, "grass", new float[][] {
             new float[] { // +Z
                     0.5f, 0.5f,
                     0.5f, 1.0f,
@@ -99,11 +100,11 @@ public enum BlockType {
         this.texCoords = texCoords;
     }
 
-    public MeshComponent getMeshComponent(boolean[] faces) {
+    public MeshComponent getMeshComponent(boolean[] faces, int x, int y, int z) {
         ArrayList<Integer> index = new ArrayList<>();
         for (int i = 0; i < faces.length; i++) if (faces[i]) index.add(i);
 
-        float[] v = new float[index.size() * 12 * 3];
+        float[] v = new float[index.size() * 12 * 2];
         float[] t = new float[index.size() * 8 * 2];
         int[] mi = new int[index.size() * 6];
 
@@ -111,7 +112,8 @@ public enum BlockType {
             int position = index.get(i);
 
             for (int j = 0; j < 12; j++) {
-                v[i * 12 + j] = vertices[position][j];
+                int offset = (j % 3 == 0) ? x : (j % 3 == 1) ? y : z;
+                v[i * 12 + j] = vertices[position][j] + offset;
             }
 
             for (int j = 0; j < 8; j++) {

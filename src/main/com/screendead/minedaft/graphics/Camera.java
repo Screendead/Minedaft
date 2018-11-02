@@ -15,7 +15,7 @@ public class Camera {
     }
 
     public Camera(Vector3f pos) {
-        this(pos, new Vector3f(0, 0, -1));
+        this(pos, new Vector3f(0, 0, 1));
     }
 
     public Camera(Vector3f pos, Vector3f look) {
