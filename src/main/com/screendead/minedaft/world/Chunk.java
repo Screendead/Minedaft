@@ -8,7 +8,7 @@ import org.lwjgl.stb.STBPerlin;
 public class Chunk {
     public static final Chunk EMPTY = new Chunk();
 
-    private float threshold = 96.0f;
+    private float threshold = 64.0f;
 
     public int cx, cz;
     private Block[] blocks = new Block[65536];
@@ -29,10 +29,10 @@ public class Chunk {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 float x = (float) (i + (cx << 4)) * scale, z = (float) (j + (cz << 4)) * scale;
-                float height = 128.0f * (STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0) - 0.5f);
+                float height = 16.0f * STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0);
                 for (int k = 0; k < 256; k++) {
                     int index = flatten(i, j, k);
-                    float detail = 64.0f * (STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0) - 0.5f);
+                    float detail = 24.0f * STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0);
 
                     BlockType type;
 
@@ -46,7 +46,7 @@ public class Chunk {
         }
     }
 
-    public Chunk() {
+    private Chunk() {
         this.empty = true;
     }
 

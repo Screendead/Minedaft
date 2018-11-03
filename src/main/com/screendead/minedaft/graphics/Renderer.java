@@ -13,8 +13,6 @@ public class Renderer {
     private Matrix4f view = new Matrix4f();
     private float fov = 100.0f;
 
-    public Renderer() { }
-
     /**
      * Render to the framebuffer
      */
@@ -63,7 +61,7 @@ public class Renderer {
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        world = new World(20, 20);
+        world = new World(4, 4);
 
         // Set the sampler2D to 0
         shader.bind();
