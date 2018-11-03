@@ -86,7 +86,7 @@ public class Renderer {
         // Set the viewMatrix
         view = new Matrix4f();
         view.perspective((float) Math.toRadians(fov),
-                width / height, 0.1f, 16.0f * 24.0f);
+                width / height, 0.1f, 65536.0f);
 
         // Update the viewMatrix in the shader
         shader.bind();

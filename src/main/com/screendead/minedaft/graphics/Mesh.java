@@ -59,7 +59,7 @@ public class Mesh {
             glBufferData(GL_ARRAY_BUFFER, normsBuffer, GL_STATIC_DRAW);
             glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
-            for (int i = 0; i < texCoords.length; i++) texCoords[i] *= 16.0f / ((i % 2 == 0) ? texture.getSize().x : texture.getSize().y);
+            for (int i = 0; i < texCoords.length; i++) texCoords[i] /= ((float) ((i % 2 == 0) ? texture.getSize().x : texture.getSize().y) / 16.0f);
 
             // Texture coordinates VBO
             vbo = glGenBuffers();
@@ -68,7 +68,7 @@ public class Mesh {
             texBuffer.put(texCoords).flip();
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
             glBufferData(GL_ARRAY_BUFFER, texBuffer, GL_STATIC_DRAW);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
+            glVertexAttribPointer(2, 2, GL_FLOAT, true, 0, 0);
 
             // Index VBO
             vbo = glGenBuffers();

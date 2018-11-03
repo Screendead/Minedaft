@@ -104,6 +104,39 @@ public enum BlockType {
                     1.0f, 2.0f,
                     1.0f, 1.0f
             }
+    }),
+    BEDROCK(4, "stone", new float[][] {
+            new float[] { // +Z
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f
+            }, new float[] { // -Z
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f
+            }, new float[] { // +X
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f
+            }, new float[] { // -X
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f
+            }, new float[] { // +Y
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f
+            }, new float[] { // -Y
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f
+            }
     });
 
     private static final float[][] vertices = new float[][] {
@@ -193,7 +226,7 @@ public enum BlockType {
             }
 
             for (int j = 0; j < 12; j++) {
-                n[i * 12 + j] = normals[(shaded) ? 5 : position][j % 3];
+                n[i * 12 + j] = normals[(shaded && position == 4) ? 5 : position][j % 3];
             }
 
             for (int j = 0; j < 8; j++) {

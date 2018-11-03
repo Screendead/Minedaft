@@ -13,7 +13,7 @@ public class Block {
             false // -Y
     };
 
-    private boolean shaded = false;
+    public boolean shaded = false;
 
     private BlockType type;
     private Vector3i position;
@@ -41,6 +41,10 @@ public class Block {
 
     public MeshComponent getMeshComponent() {
         return type.getMeshComponent(faces, position.x, position.y, position.z, shaded);
+    }
+
+    public BlockType getType() {
+        return type;
     }
 
     public int getID() {

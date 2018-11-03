@@ -8,6 +8,8 @@ import org.lwjgl.stb.STBPerlin;
 public class Chunk {
     public static final Chunk EMPTY = new Chunk();
 
+    private float threshold = 96.0f;
+
     public int cx, cz;
     private Block[] blocks = new Block[65536];
     private int[] maxHeight = new int[256];
@@ -22,21 +24,20 @@ public class Chunk {
         float scale = 0.02f;
         float dScale = 0.07f;
 
-        float threshold = 64.0f;
-
         for (int i = 0; i < maxHeight.length; i++) maxHeight[i] = 0;
 
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 float x = (float) (i + (cx << 4)) * scale, z = (float) (j + (cz << 4)) * scale;
-                float height = 48.0f * (STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0) - 0.5f);
+                float height = 128.0f * (STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0) - 0.5f);
                 for (int k = 0; k < 256; k++) {
                     int index = flatten(i, j, k);
-                    float detail = 48.0f * STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0);
+                    float detail = 64.0f * (STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0) - 0.5f);
 
                     BlockType type;
 
-                    if (k <= threshold + height + detail) type = BlockType.STONE;
+                    if (k == 0) type = BlockType.BEDROCK;
+                    else if (k <= threshold + height + detail) type = BlockType.STONE;
                     else type = BlockType.AIR;
 
                     blocks[index] = new Block(type, new Vector3i(i + (cx << 4), k, j + (cz << 4)));
@@ -71,7 +72,14 @@ public class Chunk {
                     int index = flatten(i, j, k);
 
                     blocks[index].setShaded(k < maxHeight[mh]);
-                    if (getBlock(i, k + 1, j) == BlockType.AIR.getID()) blocks[index].setType(BlockType.GRASS);
+                    if ((blocks[index].getType() != BlockType.BEDROCK) && getBlock(i, k + 1, j) == BlockType.AIR.getID())
+                        blocks[index].setType(BlockType.GRASS);
+                    if ((blocks[index].getType() != BlockType.BEDROCK) &&
+                            (getBlock(i, k + 1, j) == BlockType.GRASS.getID() ||
+                            getBlock(i, k + 2, j) == BlockType.GRASS.getID() ||
+                            getBlock(i, k + 3, j) == BlockType.GRASS.getID() ||
+                            getBlock(i, k + 4, j) == BlockType.GRASS.getID()))
+                        blocks[index].setType(BlockType.DIRT);
 
                     if (getBlock(i, k, j + 1) == BlockType.AIR.getID()) blocks[index].showFace(0);
                     if (getBlock(i, k, j - 1) == BlockType.AIR.getID()) blocks[index].showFace(1);
