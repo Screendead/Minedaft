@@ -10,6 +10,7 @@ public class Chunk {
 
     public int cx, cz;
     private Block[] blocks = new Block[65536];
+    private int[] maxHeight = new int[256];
     private Mesh mesh = null;
     private boolean empty = false;
     private Chunk posX, negX, posZ, negZ;
@@ -19,17 +20,26 @@ public class Chunk {
         this.cz = cz;
 
         float scale = 0.02f;
-        float dScale = 0.05f;
+        float dScale = 0.07f;
+
+        float threshold = 64.0f;
+
+        for (int i = 0; i < maxHeight.length; i++) maxHeight[i] = 0;
 
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 float x = (float) (i + (cx << 4)) * scale, z = (float) (j + (cz << 4)) * scale;
-                float height = 32 + 16 * STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0);
+                float height = 48.0f * (STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0) - 0.5f);
                 for (int k = 0; k < 256; k++) {
                     int index = flatten(i, j, k);
-                    float detail = 32 * STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0);
-                    blocks[index] = new Block((k < (height + detail)) ? BlockType.GRASS : BlockType.AIR, new Vector3i(i + (cx << 4), k, j + (cz << 4)));
-//                    blocks[index] = new Block(BlockType.GRASS, new Vector3i(i + (cx << 4), k, j + (cz << 4)));
+                    float detail = 48.0f * STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0);
+
+                    BlockType type;
+
+                    if (k <= threshold + height + detail) type = BlockType.STONE;
+                    else type = BlockType.AIR;
+
+                    blocks[index] = new Block(type, new Vector3i(i + (cx << 4), k, j + (cz << 4)));
                 }
             }
         }
@@ -49,16 +59,19 @@ public class Chunk {
         this.posZ = posZ;
         this.negZ = negZ;
 
-        MeshComponent m = new MeshComponent(new float[] {}, new float[] {}, new int[] {});
+        MeshComponent m = new MeshComponent(new float[] {}, new float[] {}, new float[] {}, new int[] {});
 
-        for (int k = 0; k < 256; k++) {
+        for (int k = 255; k >= 0; k--) {
             for (int i = 0; i < 16; i++) {
                 for (int j = 0; j < 16; j++) {
                     if (getBlock(i, k, j) == BlockType.AIR.getID()) continue;
+                    int mh = flatten(i, j, 0);
+                    if (maxHeight[mh] < k) maxHeight[mh] = k;
 
                     int index = flatten(i, j, k);
 
-//                    for (int a = 0; a < 6; a++) blocks[index].showFace(a);
+                    blocks[index].setShaded(k < maxHeight[mh]);
+                    if (getBlock(i, k + 1, j) == BlockType.AIR.getID()) blocks[index].setType(BlockType.GRASS);
 
                     if (getBlock(i, k, j + 1) == BlockType.AIR.getID()) blocks[index].showFace(0);
                     if (getBlock(i, k, j - 1) == BlockType.AIR.getID()) blocks[index].showFace(1);
@@ -84,8 +97,7 @@ public class Chunk {
     }
 
     private int getBlock(int x, int y, int z) {
-//        if ((x < 0) || (x > 15) || (y < 0) || (y > 255) || (z < 0) || (z > 15)) return BlockType.AIR.getID();
-        if (this.empty || (y == -1) || (y == 256)) return BlockType.AIR.getID();
+        if (this.empty || (y < 0) || (y > 255)) return BlockType.AIR.getID();
         if (x == 16) return posX.getBlock(0, y, z);
         if (x == -1) return negX.getBlock(15, y, z);
         if (z == 16) return posZ.getBlock(x, y, 0);

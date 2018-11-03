@@ -1,6 +1,5 @@
 package com.screendead.minedaft.graphics;
 
-import com.screendead.minedaft.world.Chunk;
 import com.screendead.minedaft.world.World;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
@@ -57,7 +56,7 @@ public class Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Create texture and shader
-        Mesh.setGlobalTexture(new Image("grassblock.png"));
+        Mesh.setGlobalTexture(new Image("texture_map.png"));
         shader = new Shader("basic");
         shader.addUniform("view");
         shader.addUniform("transform");
@@ -72,7 +71,7 @@ public class Renderer {
         Shader.unbind();
 
         // Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
     }
 
     /**

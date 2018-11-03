@@ -13,6 +13,8 @@ public class Block {
             false // -Y
     };
 
+    private boolean shaded = false;
+
     private BlockType type;
     private Vector3i position;
 
@@ -29,8 +31,16 @@ public class Block {
         faces[index] = false;
     }
 
+    public void setShaded(boolean shaded) {
+        this.shaded = shaded;
+    }
+
+    public void setType(BlockType type) {
+        this.type = type;
+    }
+
     public MeshComponent getMeshComponent() {
-        return type.getMeshComponent(faces, position.x, position.y, position.z);
+        return type.getMeshComponent(faces, position.x, position.y, position.z, shaded);
     }
 
     public int getID() {

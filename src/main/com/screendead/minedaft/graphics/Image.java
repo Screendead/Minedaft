@@ -24,7 +24,7 @@ public class Image {
             h = MemoryUtil.memAllocInt(1);
             channels = MemoryUtil.memAllocInt(1);
 
-            STBImage.stbi_set_flip_vertically_on_load(true);
+            STBImage.stbi_set_flip_vertically_on_load(false);
 
             // Load the texture
             ByteBuffer img = STBImage.stbi_load("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/img/" + source, w, h, channels, 4);

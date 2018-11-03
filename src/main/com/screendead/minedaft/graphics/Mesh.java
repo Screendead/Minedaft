@@ -31,8 +31,8 @@ public class Mesh {
     private static ArrayList<Integer> vboList = new ArrayList<>();
     private final int vao, vertexCount;
 
-    public Mesh(float[] positions, float[] texCoords, int[] indices) {
-        FloatBuffer vertBuffer = null, texBuffer = null;
+    public Mesh(float[] positions, float[] normals, float[] texCoords, int[] indices) {
+        FloatBuffer vertBuffer = null, normsBuffer = null, texBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
             vertexCount = indices.length;
@@ -50,6 +50,17 @@ public class Mesh {
             glBufferData(GL_ARRAY_BUFFER, vertBuffer, GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
+            // Normals VBO
+            vbo = glGenBuffers();
+            vboList.add(vbo);
+            normsBuffer = MemoryUtil.memAllocFloat(normals.length);
+            normsBuffer.put(normals).flip();
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glBufferData(GL_ARRAY_BUFFER, normsBuffer, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+
+            for (int i = 0; i < texCoords.length; i++) texCoords[i] *= 16.0f / ((i % 2 == 0) ? texture.getSize().x : texture.getSize().y);
+
             // Texture coordinates VBO
             vbo = glGenBuffers();
             vboList.add(vbo);
@@ -57,7 +68,7 @@ public class Mesh {
             texBuffer.put(texCoords).flip();
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
             glBufferData(GL_ARRAY_BUFFER, texBuffer, GL_STATIC_DRAW);
-            glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+            glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
 
             // Index VBO
             vbo = glGenBuffers();
@@ -70,6 +81,7 @@ public class Mesh {
             glBindVertexArray(0);
         } finally {
             if (vertBuffer != null) MemoryUtil.memFree(vertBuffer);
+            if (normsBuffer != null) MemoryUtil.memFree(normsBuffer);
             if (texBuffer != null) MemoryUtil.memFree(texBuffer);
             if (indicesBuffer != null) MemoryUtil.memFree(indicesBuffer);
         }
@@ -89,12 +101,14 @@ public class Mesh {
             glBindVertexArray(vao);
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
+            glEnableVertexAttribArray(2);
 
             glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
 
             // Restore state
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
+            glDisableVertexAttribArray(2);
             glBindVertexArray(0);
         }
     }
