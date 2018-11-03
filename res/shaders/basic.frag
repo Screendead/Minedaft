@@ -3,7 +3,7 @@
 uniform sampler2D tex;
 
 layout (location = 0) in vec3 normal;
-layout (location = 1) in vec2 tex_coords;
+layout (location = 1) centroid in vec2 tex_coords;
 
 out vec4 fragColor;
 
