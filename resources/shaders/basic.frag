@@ -18,5 +18,4 @@ void main() {
 	vec4 t = texture(tex, tex_coords);
 
 	fragColor = vec4(t.rgb * diffuse, t.a);
-	// fragColor = texture(tex, tex_coords);
 }

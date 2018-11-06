@@ -12,7 +12,6 @@ layout (location = 0) out vec3 normal;
 layout (location = 1) out vec2 tex_coords;
 
 void main() {
-	// normal = (view * camera * transform * vec4(norms, 0.0)).xyz;
 	normal = norms;
 	tex_coords = textures;
 	gl_Position = view * camera * transform * vec4(position, 1.0);
