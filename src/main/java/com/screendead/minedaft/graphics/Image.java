@@ -9,7 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL12.GL_TEXTURE_BASE_LEVEL;
+import static org.lwjgl.opengl.GL12.GL_TEXTURE_MAX_LEVEL;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL14.GL_TEXTURE_LOD_BIAS;
@@ -18,7 +19,7 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 public class Image {
     private int id, width, height;
 
-    public Image(String source) {
+    Image(String source) {
         // Get an image for texturing
         IntBuffer w = null, h = null, channels = null;
         try {
@@ -30,7 +31,7 @@ public class Image {
 
             // Load the texture
 //            ByteBuffer img = STBImage.stbi_load("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/img/" + source, w, h, channels, 4);
-            ByteBuffer img = STBImage.stbi_load(Minedaft.class.getClassLoader().getResource("img/" + source).toURI().getPath().substring(1), w, h, channels, 4);
+            ByteBuffer img = STBImage.stbi_load(Minedaft.getResource("img/" + source), w, h, channels, 4);
             if (img == null) throw new RuntimeException("Texture " + source + " failed to load.");
 
             // Store width and height values
@@ -69,7 +70,7 @@ public class Image {
             // Unbind the texture
             Image.unbind();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e.getClass() + ": " + e.getMessage());
         } finally {
             // Free memory locations of buffers
             if (w != null) MemoryUtil.memFree(w);
@@ -81,26 +82,26 @@ public class Image {
     /**
      * @return The texture ID
      */
-    public int getID() {
+    int getID() {
         return id;
     }
 
     /**
      * @return A Vector2i storing width and height
      */
-    public Vector2i getSize() {
+    Vector2i getSize() {
         return new Vector2i(width, height);
     }
 
     /**
      * Bind this image to GL_TEXTURE_2D
      */
-    public void bind() { glBindTexture(GL_TEXTURE_2D, id); }
+    private void bind() { glBindTexture(GL_TEXTURE_2D, id); }
 
     /**
      * Unbind GL_TEXTURE_2D
      */
-    public static void unbind() {
+    private static void unbind() {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

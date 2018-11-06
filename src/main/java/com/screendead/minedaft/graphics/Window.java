@@ -13,6 +13,7 @@ import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -23,7 +24,7 @@ public class Window {
     private boolean fullscreen = false, visible = false;
     private int initialWidth, initialHeight;
     private int width, height;
-    public Renderer renderer;
+    private Renderer renderer;
     private long monitor;
     private GLFWVidMode v;
     private int vsync;
@@ -96,7 +97,7 @@ public class Window {
         this.toggleVisibility();
     }
 
-    public void toggleFullscreen() {
+    private void toggleFullscreen() {
         toggleVisibility();
 
         fullscreen = !fullscreen;
@@ -124,7 +125,7 @@ public class Window {
         toggleVisibility();
     }
 
-    public void toggleVisibility() {
+    private void toggleVisibility() {
         visible = !visible;
 
         if (visible) {
@@ -170,7 +171,7 @@ public class Window {
      * Helper method for GLFW input keys
      * @param key The GLFW key ID
      */
-    public boolean key(int key) {
+    private boolean key(int key) {
         return input.keys[key];
     }
 
@@ -195,7 +196,7 @@ public class Window {
 
         // Terminate GLFW and free the error callback
         glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
 
     /**
@@ -241,18 +242,18 @@ public class Window {
      * Set the icon of the window
      * @param source The image to use as icon
      */
-    public void setIcon(String source) {
+    private void setIcon(String source) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer w = BufferUtils.createIntBuffer(1),
                     h = BufferUtils.createIntBuffer(1),
                     channels = BufferUtils.createIntBuffer(1);
 
-            ByteBuffer img = STBImage.stbi_load(Minedaft.class.getClassLoader().getResource("img/" + source).toURI().getPath().substring(1), w, h, channels, 4);
+            ByteBuffer img = STBImage.stbi_load(Minedaft.getResource("img/" + source), w, h, channels, 4);
             if (img == null) throw new RuntimeException("Icon failed to load.");
 
             glfwSetWindowIcon(handle, GLFWImage.create(1).put(0, GLFWImage.create().set(w.get(), h.get(), img)));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e.getClass() + ": " + e.getMessage());
         }
     }
 

@@ -20,7 +20,7 @@ public class Shader {
 
     private HashMap<String, Integer> uniforms;
 
-    public Shader(String filename) {
+    Shader(String filename) {
         uniforms = new HashMap<>();
 
         // Create the shader program on the graphics card
@@ -61,14 +61,14 @@ public class Shader {
     /**
      * Use this shader
      */
-    public void bind() {
+    void bind() {
         glUseProgram(program);
     }
 
     /**
      * Unbind all shaders
      */
-    public static void unbind() {
+    static void unbind() {
         glUseProgram(0);
     }
 
@@ -76,7 +76,7 @@ public class Shader {
      * Create a writable variable for use in the shaders
      * @param name The exact name of the variable
      */
-    public void addUniform(String name) {
+    void addUniform(String name) {
         int uniformLocation = glGetUniformLocation(program, name);
         if (uniformLocation == 0xFFFFFFFF) throw new RuntimeException("Failed to find uniform: " + name);
 
@@ -97,7 +97,7 @@ public class Shader {
      * @param name The name of the uniform variable
      * @param value The value to assign
      */
-    public void setUniform(String name, int value) {
+    void setUniform(String name, int value) {
         glUniform1i(uniforms.get(name), value);
     }
 
@@ -133,7 +133,7 @@ public class Shader {
      * @param name The name of the uniform variable
      * @param value The value to assign
      */
-    public void setUniform(String name, Matrix4f value) {
+    void setUniform(String name, Matrix4f value) {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
         value.get(buffer);
 
@@ -145,13 +145,13 @@ public class Shader {
      * @param filename The name of the file (without a path)
      * @return A parsed string representing the shader in the file
      */
-    public static String readFile(String filename) {
+    private static String readFile(String filename) {
         StringBuilder source = new StringBuilder();
         BufferedReader reader;
 
         try {
 //            reader = new BufferedReader(new FileReader("C:/Users/admin/Documents/IntelliJ IDEA Projects/Minedaft/res/shaders/" + filename));
-            reader = new BufferedReader(new FileReader(Minedaft.class.getClassLoader().getResource("shaders/" + filename).toURI().getPath().substring(1)));
+            reader = new BufferedReader(new FileReader(Minedaft.getResource("shaders/" + filename)));
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -160,7 +160,7 @@ public class Shader {
             }
             reader.close();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e.getClass() + ": " + e.getMessage());
         }
 
         return source.toString();

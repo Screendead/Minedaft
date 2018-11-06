@@ -12,7 +12,7 @@ public class Minedaft {
     /**
      * Begin the game
      */
-    public void run() {
+    private void run() {
         // Create the window
         window = new Window("Minedaft", 1080, 720, true, true);
 
@@ -66,5 +66,11 @@ public class Minedaft {
     public static void main(String[] args) {
         // Create an instance and start the Game Loop
         new Minedaft().run();
+    }
+
+    public static String getResource(String name) {
+        String out = "./resources/" + name;
+        System.out.println("Loading " + out + " ...");
+        return out;
     }
 }
