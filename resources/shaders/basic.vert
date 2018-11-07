@@ -1,4 +1,4 @@
-#version 460
+#version 410
 
 uniform mat4 view;
 uniform mat4 transform;
@@ -9,7 +9,7 @@ layout (location = 1) in vec3 norms;
 layout (location = 2) in vec2 textures;
 
 layout (location = 0) out vec3 normal;
-layout (location = 1) out vec2 tex_coords;
+layout (location = 1) centroid out vec2 tex_coords;
 
 void main() {
 	normal = norms;

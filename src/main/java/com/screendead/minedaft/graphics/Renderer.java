@@ -61,7 +61,7 @@ public class Renderer {
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        world = new World(8, 8);
+        world = new World(32, 32);
 
         // Set the sampler2D to 0
         shader.bind();
@@ -84,7 +84,7 @@ public class Renderer {
         // Set the viewMatrix
         view = new Matrix4f();
         view.perspective((float) Math.toRadians(fov),
-                width / height, 0.1f, 65536.0f);
+                width / height, 0.01f, 65536.0f);
 
         // Update the viewMatrix in the shader
         shader.bind();
