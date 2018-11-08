@@ -12,37 +12,37 @@ public class World {
 
         chunks = new Chunk[xSize][zSize];
 
-        long ms, totalms = System.currentTimeMillis();
-        for (int z = 0; z < chunks.length; z++) {
-            for (int x = 0; x < chunks[0].length; x++) {
-                ms = System.currentTimeMillis();
+        long ns, totalns = System.nanoTime();
+        for (int x = 0; x < chunks.length; x++) {
+            for (int z = 0; z < chunks[0].length; z++) {
+                ns = System.nanoTime();
                 chunks[x][z] = new Chunk(x, z);
-                ms = System.currentTimeMillis() - ms;
-                System.out.println("Chunk " + (z * zSize + x + 1) + "/" + (xSize * zSize) + " generated (took " + ms + "ms) ...");
+                ns = System.nanoTime() - ns;
+                System.out.println("Chunk " + (x * zSize + z + 1) + "/" + (xSize * zSize) + " generated in " + (float) Math.floor((float) ns / 1000.0f) / 1000.0f + "ms ...");
             }
         }
 
         generateMeshes();
-        totalms = System.currentTimeMillis() - totalms;
-        System.out.println("World generation (" + xSize * zSize + " chunks) took " + (float) totalms / 1000.0f + "s");
+        totalns = System.nanoTime() - totalns;
+        System.out.println("World generation (" + xSize * zSize + " chunks) took " + (float) Math.floor((float) totalns / 1000000.0f) / 1000.0f + "s");
     }
 
     public void render() {
-        for (int z = 0; z < chunks.length; z++) {
-            for (int x = 0; x < chunks[0].length; x++) {
+        for (int x = 0; x < chunks.length; x++) {
+            for (int z = 0; z < chunks[0].length; z++) {
                 chunks[x][z].render();
             }
         }
     }
 
     private void generateMeshes() {
-        long ms;
-        for (int z = 0; z < chunks.length; z++) {
-            for (int x = 0; x < chunks[0].length; x++) {
-                ms = System.currentTimeMillis();
+        long ns;
+        for (int x = 0; x < chunks.length; x++) {
+            for (int z = 0; z < chunks[0].length; z++) {
+                ns = System.nanoTime();
                 generateMesh(x, z);
-                ms = System.currentTimeMillis() - ms;
-                System.out.println("Mesh for chunk " + (z * zSize + x + 1) + "/" + (xSize * zSize) + " generated (took " + ms + "ms) ...");
+                ns = System.nanoTime() - ns;
+                System.out.println("Mesh for chunk " + (x * zSize + z + 1) + "/" + (xSize * zSize) + " generated in " + (float) Math.floor((float) ns / 1000.0f) / 1000.0f + "ms ...");
             }
         }
     }
@@ -104,8 +104,8 @@ public class World {
     }
 
     public void cleanup() {
-        for (int z = 0; z < chunks.length; z++) {
-            for (int x = 0; x < chunks[0].length; x++) {
+        for (int x = 0; x < chunks.length; x++) {
+            for (int z = 0; z < chunks[0].length; z++) {
                 chunks[x][z].cleanup();
             }
         }
