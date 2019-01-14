@@ -2,6 +2,8 @@ package com.screendead.minedaft;
 
 import com.screendead.minedaft.graphics.Window;
 
+import javax.swing.*;
+
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
@@ -64,12 +66,21 @@ public class Minedaft {
     }
 
     public static void main(String[] args) {
+        if (args == null || args.length == 0) {
+            JOptionPane.showMessageDialog(null, "Please open this program through the included Launcher", "Unauthorised", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+        if (!args[0].equals("160575")) {
+            JOptionPane.showMessageDialog(null, "You may not run this program without using the Launcher", "Unauthorised", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+
         // Create an instance and start the Game Loop
         new Minedaft().run();
     }
 
     public static String getResource(String name) {
-        String out = "./resources/" + name;
+        String out = "./assets/resources/" + name;
         System.out.println("Loading " + out + " ...");
         return out;
     }
