@@ -3,7 +3,8 @@ using namespace std;
 
 int main()
 {
-    system("java -Xms1g -Xmx8g -jar ./assets/Minedaft.jar 160575");
+    system("cd ./assets");
+    system("java -Xms1g -Xmx8g -jar Minedaft.jar \"this is cryptographically secure\"");
 
     return 0;
 }

@@ -4,6 +4,10 @@ import com.screendead.minedaft.graphics.Window;
 
 import javax.swing.*;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
@@ -70,7 +74,7 @@ public class Minedaft {
             JOptionPane.showMessageDialog(null, "Please open this program through the included Launcher", "Unauthorised", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-        if (!args[0].equals("160575")) {
+        if (!sha256(args[0]).equals("f9407f3af467e2f3889c87958019e0fa0a4ca058b24227cf34571c35d20d7e58")) {
             JOptionPane.showMessageDialog(null, "You may not run this program without using the Launcher", "Unauthorised", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -80,8 +84,26 @@ public class Minedaft {
     }
 
     public static String getResource(String name) {
-        String out = "./assets/resources/" + name;
+        String out = "./resources/" + name;
         System.out.println("Loading " + out + " ...");
         return out;
+    }
+
+    private static String sha256(String in) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = digest.digest(in.getBytes(StandardCharsets.UTF_8));
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }

@@ -3,3 +3,5 @@
 out/
 res/img/block/
 *.jar
+*.exe
+
