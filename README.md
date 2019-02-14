@@ -15,6 +15,7 @@ What is required to run this code.
 * [JDK 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
 * [Gradle](https://gradle.org/install/)
 * [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
+* [LWJGL3](https://www.lwjgl.org/)
 
 ## Contributing
 
