@@ -31,7 +31,7 @@ public class Mesh {
     private static ArrayList<Integer> vboList = new ArrayList<>();
     private final int vao, vertexCount;
 
-    Mesh(float[] positions, float[] normals, float[] texCoords, int[] indices) {
+    public Mesh(float[] positions, float[] normals, float[] texCoords, int[] indices) {
         FloatBuffer vertBuffer = null, normsBuffer = null, texBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
@@ -130,7 +130,7 @@ public class Mesh {
         glDeleteVertexArrays(vao);
     }
 
-    static void setGlobalTexture(Image t) {
+    public static void setGlobalTexture(Image t) {
         texture = t;
     }
 

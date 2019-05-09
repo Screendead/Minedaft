@@ -4,7 +4,7 @@ import com.screendead.minedaft.graphics.MeshComponent;
 import org.joml.Vector3i;
 
 public class Block {
-    boolean[] faces = new boolean[] {
+    public boolean[] faces = new boolean[] {
             false, // +Z
             false, // -Z
             false, // +X
@@ -13,17 +13,17 @@ public class Block {
             false // -Y
     };
 
-    private boolean shaded = false;
+    public boolean shaded = false;
 
     private BlockType type;
     private Vector3i position;
 
-    Block(BlockType type, Vector3i position) {
+    public Block(BlockType type, Vector3i position) {
         this.type = type;
         this.position = position;
     }
 
-    void showFace(int index) {
+    public void showFace(int index) {
         faces[index] = true;
     }
 
@@ -31,23 +31,23 @@ public class Block {
         faces[index] = false;
     }
 
-    void setShaded(boolean shaded) {
+    public void setShaded(boolean shaded) {
         this.shaded = shaded;
     }
 
-    void setType(BlockType type) {
+    public void setType(BlockType type) {
         this.type = type;
     }
 
-    MeshComponent getMeshComponent() {
+    public MeshComponent getMeshComponent() {
         return type.getMeshComponent(faces, position.x, position.y, position.z, shaded);
     }
 
-    BlockType getType() {
+    public BlockType getType() {
         return type;
     }
 
-    int getID() {
+    public int getID() {
         return type.getID();
     }
 

@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 
-class Renderer {
+public class Renderer {
     private Shader shader;
     private World world;
     private Matrix4f view = new Matrix4f();
@@ -16,7 +16,7 @@ class Renderer {
     /**
      * Render to the framebuffer
      */
-    void render(Camera camera) {
+    public void render(Camera camera) {
         // Clear the framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -34,7 +34,7 @@ class Renderer {
     /**
      * Initialise OpenGL context for use with this window
      */
-    void init() {
+    public void init() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
         // LWJGL detects the context that is current in the current thread,
@@ -61,7 +61,7 @@ class Renderer {
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        world = new World(5, 5);
+        world = new World(16, 16);
 
         // Set the sampler2D to 0
         shader.bind();
@@ -77,7 +77,7 @@ class Renderer {
      * @param width The window width
      * @param height The window height
      */
-    void setViewport(float width, float height) {
+    public void setViewport(float width, float height) {
         // Set the viewport
         glViewport(0, 0, (int) width, (int) height);
 
@@ -105,7 +105,7 @@ class Renderer {
      * @param sy Y component of the scale
      * @param sz Z component of the scale
      */
-    void setTransform(float dx, float dy, float dz, float rx, float ry, float rz, float sx, float sy, float sz) {
+    public void setTransform(float dx, float dy, float dz, float rx, float ry, float rz, float sx, float sy, float sz) {
         shader.bind();
             shader.setUniform("transform", new Matrix4f().translation(dx, dy, dz)
                     .rotateYXZ((float) Math.toRadians(ry), (float) Math.toRadians(rx), (float) Math.toRadians(rz))
@@ -113,7 +113,7 @@ class Renderer {
         Shader.unbind();
     }
 
-    void cleanup() {
+    public void cleanup() {
         world.cleanup();
     }
 }
