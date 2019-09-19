@@ -8,18 +8,18 @@ What is required to run this code.
 
 ### Prerequisites
 
-* [JDK 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
+* [JDK 12](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
 
 ## Built With
 
-* [JDK 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
+* [JDK 12](https://www.oracle.com/technetwork/java/javase/downloads/jdk12-downloads-5295953.html)
 * [Gradle](https://gradle.org/install/)
 * [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
 * [LWJGL3](https://www.lwjgl.org/)
 
 ## Contributing
 
-If you can make sense of any of this, you're welcome to contribute. 
+If you can make sense of any of this garbled mess, you're welcome to contribute. 
 
 ## Authors
 
