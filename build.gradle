@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-version '1.0-SNAPSHOT'
+version '1.0.0'
 
 sourceCompatibility = 1.8
 
@@ -19,12 +19,12 @@ dependencies {
     compile "org.lwjgl:lwjgl-opencl:3.2.0"
     compile "org.lwjgl:lwjgl-opengl:3.2.0"
     compile "org.lwjgl:lwjgl-stb:3.2.0"
-    compile "org.lwjgl:lwjgl:3.2.0:natives-windows"
-    compile "org.lwjgl:lwjgl-assimp:3.2.0:natives-windows"
-    compile "org.lwjgl:lwjgl-glfw:3.2.0:natives-windows"
-    compile "org.lwjgl:lwjgl-openal:3.2.0:natives-windows"
-    compile "org.lwjgl:lwjgl-opengl:3.2.0:natives-windows"
-    compile "org.lwjgl:lwjgl-stb:3.2.0:natives-windows"
+    compile "org.lwjgl:lwjgl:3.2.0:natives-macos"
+    compile "org.lwjgl:lwjgl-assimp:3.2.0:natives-macos"
+    compile "org.lwjgl:lwjgl-glfw:3.2.0:natives-macos"
+    compile "org.lwjgl:lwjgl-openal:3.2.0:natives-macos"
+    compile "org.lwjgl:lwjgl-opengl:3.2.0:natives-macos"
+    compile "org.lwjgl:lwjgl-stb:3.2.0:natives-macos"
     compile "org.joml:joml:1.9.11"
 }
 

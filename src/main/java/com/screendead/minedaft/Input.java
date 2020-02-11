@@ -1,10 +1,10 @@
 package com.screendead.minedaft;
 
-import static org.lwjgl.glfw.GLFW.*;
-
 import com.screendead.minedaft.graphics.Window;
 import org.joml.Vector2i;
 import org.lwjgl.glfw.*;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Input {
     public boolean[] keys = new boolean[68836];
@@ -72,8 +72,10 @@ public class Input {
 
         glfwSetCursorPos(window.getHandle(), x, y);
 
-        dx = xpos - x;
-        dy = ypos - y;
+//        dx = xpos - x;
+//        dy = ypos - y;
+        dx = xpos;
+        dy = ypos;
     }
 
     private void onMouseScroll(double xoffset, double yoffset) {

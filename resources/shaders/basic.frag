@@ -1,21 +1,21 @@
-#version 410
+#version 120
 
 uniform sampler2D tex;
 
-layout (location = 0) in vec3 normal;
-layout (location = 1) centroid in vec2 tex_coords;
-
-out vec4 fragColor;
+varying vec3 norms;
+varying vec2 tex_c;
 
 const float ambient = 0.3;
+float diffuse;
+vec4 color;
 
 void main() {
-	float diffuse = max(ambient,
-			(dot(normal, vec3(0, -1, 0)) * 2 +
-			abs(dot(normal, vec3(1, 0, 0))) +
-			abs(dot(normal, vec3(0, 0, 1))) + 1) / 5);
+    diffuse = max(ambient,
+    (dot(norms, vec3(0, -1, 0)) * 2 +
+    abs(dot(norms, vec3(1, 0, 0))) +
+    abs(dot(norms, vec3(0, 0, 1))) + 1) / 5);
 
-	vec4 t = texture(tex, tex_coords);
+    color = texture2D(tex, tex_c);
 
-	fragColor = vec4(t.rgb * diffuse, t.a);
+    gl_FragColor = vec4(color.rgb * diffuse, color.a);
 }

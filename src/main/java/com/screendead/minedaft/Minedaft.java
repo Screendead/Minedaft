@@ -3,7 +3,6 @@ package com.screendead.minedaft;
 import com.screendead.minedaft.graphics.Window;
 
 import javax.swing.*;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,7 +19,7 @@ public class Minedaft {
      */
     private void run() {
         // Create the window
-        window = new Window("Minedaft", 1080, 720, true, true);
+        window = new Window("Minedaft", 1080, 720, false, true);
 
         // Start the game loop
         loop();

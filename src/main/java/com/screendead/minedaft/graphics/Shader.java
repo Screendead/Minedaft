@@ -49,7 +49,7 @@ public class Shader {
         // Set locations for data to be sent to the vertex shader
         glBindAttribLocation(program, 0, "position");
         glBindAttribLocation(program, 1, "normals");
-        glBindAttribLocation(program, 2, "textures");
+        glBindAttribLocation(program, 2, "tex_coords");
 
         // Link and validate the shaders
         glLinkProgram(program);

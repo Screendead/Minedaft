@@ -1,18 +1,18 @@
-#version 410
+#version 120
 
 uniform mat4 view;
 uniform mat4 transform;
 uniform mat4 camera;
 
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 norms;
-layout (location = 2) in vec2 textures;
+attribute vec3 position;
+attribute vec3 normals;
+attribute vec2 tex_coords;
 
-layout (location = 0) out vec3 normal;
-layout (location = 1) centroid out vec2 tex_coords;
+varying vec3 norms;
+varying vec2 tex_c;
 
 void main() {
-	normal = norms;
-	tex_coords = textures;
+	norms = normals;
+	tex_c = tex_coords;
 	gl_Position = view * camera * transform * vec4(position, 1.0);
 }
