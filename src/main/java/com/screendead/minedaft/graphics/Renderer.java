@@ -45,12 +45,12 @@ public class Renderer {
         // Enable 2D texturing
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
+//        glEnable(GL_CULL_FACE);
         glEnable(GL_BLEND);
         glEnable(GL_MULTISAMPLE);
 
         // OpenGL settings
-        glCullFace(GL_BACK);
+//        glCullFace(GL_BACK);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Create texture and shader
@@ -61,7 +61,7 @@ public class Renderer {
         shader.addUniform("camera");
         shader.addUniform("tex");
 
-        world = new World(16, 16);
+        world = new World(8, 8);
 
         // Set the sampler2D to 0
         shader.bind();

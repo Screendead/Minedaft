@@ -10,7 +10,10 @@ public class Input {
     public boolean[] keys = new boolean[68836];
     public boolean[] mods = new boolean[68836];
 
-    public float x, y, dx, dy;
+    public double x, y;
+    public float dx, dy;
+    private boolean firstMouse = true;
+    private int mm = 0;
 
     private GLFWWindowSizeCallback windowSizeCallback;
     private GLFWCursorPosCallback cursorPosCallback;
@@ -25,8 +28,8 @@ public class Input {
         this.window = window;
 
         Vector2i size = window.getSize();
-        x = (float) size.x / 2;
-        y = (float) size.y / 2;
+        x = (float) size.x / 2.0f;
+        y = (float) size.y / 2.0f;
 
         init();
     }
@@ -65,17 +68,23 @@ public class Input {
 
     }
 
-    private void onMouseMove(float xpos, float ypos) {
+    private void onMouseMove(double xpos, double ypos) {
         Vector2i size = window.getSize();
-        x = (float) size.x / 2;
-        y = (float) size.y / 2;
+        x = (double) size.x / 2.0;
+        y = (double) size.y / 2.0;
 
-        glfwSetCursorPos(window.getHandle(), x, y);
+        if (firstMouse) {
+            glfwSetCursorPos(window.getHandle(), (int) x, (int) y);
+            firstMouse = false;
+            return;
+        }
 
-//        dx = xpos - x;
-//        dy = ypos - y;
-        dx = xpos;
-        dy = ypos;
+        glfwSetCursorPos(window.getHandle(), (int) x, (int) y);
+
+        dx = (float) (xpos - x);
+        dy = (float) (ypos - y);
+
+        System.out.println("Mouse moved " + ++ mm + " times.");
     }
 
     private void onMouseScroll(double xoffset, double yoffset) {
@@ -107,7 +116,7 @@ public class Input {
                          * xpos - the new absolute x-value of the cursor
                          * ypos - the new absolute y-value of the cursor
                          */
-                        onMouseMove((float) xpos, (float) ypos);
+                        onMouseMove(xpos, ypos);
                     }
                 });
 
@@ -124,15 +133,9 @@ public class Input {
                          * mods - bitfield describing which modifier keys were held down
                          */
                         switch (action) {
-                            case GLFW_PRESS:
-                                onKeyPress(key, scancode, mods);
-                                break;
-                            case GLFW_RELEASE:
-                                onKeyRelease(key, scancode, mods);
-                                break;
-                            case GLFW_REPEAT:
-                                onKeyRepeat(key, scancode, mods);
-                                break;
+                            case GLFW_PRESS -> onKeyPress(key, scancode, mods);
+                            case GLFW_RELEASE -> onKeyRelease(key, scancode, mods);
+                            case GLFW_REPEAT -> onKeyRepeat(key, scancode, mods);
                         }
                     }
                 });
@@ -149,15 +152,9 @@ public class Input {
                          * mods - bitfield describing which modifier keys were held down
                          */
                         switch (action) {
-                            case GLFW_PRESS:
-                                onMouseButtonPress(button, mods);
-                                break;
-                            case GLFW_RELEASE:
-                                onMouseButtonRelease(button, mods);
-                                break;
-                            case GLFW_REPEAT:
-                                onMouseButtonRepeat(button, mods);
-                                break;
+                            case GLFW_PRESS -> onMouseButtonPress(button, mods);
+                            case GLFW_RELEASE -> onMouseButtonRelease(button, mods);
+                            case GLFW_REPEAT -> onMouseButtonRepeat(button, mods);
                         }
                     }
                 });

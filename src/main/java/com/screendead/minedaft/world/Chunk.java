@@ -4,6 +4,8 @@ import com.screendead.minedaft.graphics.Mesh;
 import org.joml.Vector3i;
 import org.lwjgl.stb.STBPerlin;
 
+import java.util.Arrays;
+
 public class Chunk {
     public static final Chunk EMPTY = new Chunk();
 
@@ -22,7 +24,7 @@ public class Chunk {
         float scale = 0.02f;
         float dScale = 0.02f;
 
-        for (int i = 0; i < maxHeight.length; i++) maxHeight[i] = 0;
+        Arrays.fill(maxHeight, 0);
 
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
@@ -37,6 +39,7 @@ public class Chunk {
 
                     if (k == 0) type = BlockType.BEDROCK;
                     else if (k <= threshold + height + detail) type = BlockType.STONE;
+//                    else if (k <= threshold + height) type = BlockType.STONE;
                     else type = BlockType.AIR;
 
                     blocks[index] = new Block(type, new Vector3i(i + (cx << 4), k, j + (cz << 4)));

@@ -3,8 +3,8 @@ package com.screendead.minedaft.world;
 import com.screendead.minedaft.graphics.MeshComponent;
 
 public class World {
-    private Chunk[][] chunks;
-    private int xSize, zSize;
+    private final Chunk[][] chunks;
+    private final int xSize, zSize;
 
     public World(int xSize, int zSize) {
         this.xSize = xSize;
@@ -13,8 +13,8 @@ public class World {
         chunks = new Chunk[xSize][zSize];
 
         long ns, totalns = System.nanoTime();
-        for (int x = 0; x < chunks.length; x++) {
-            for (int z = 0; z < chunks[0].length; z++) {
+        for (int z = 0; z < chunks.length; z++) {
+            for (int x = 0; x < chunks[0].length; x++) {
                 ns = System.nanoTime();
                 chunks[x][z] = new Chunk(x, z);
                 ns = System.nanoTime() - ns;

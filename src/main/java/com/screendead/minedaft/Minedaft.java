@@ -60,7 +60,7 @@ public class Minedaft {
             }
 
             if (System.currentTimeMillis() - timer > 1000) {
-                System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
+//                System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
                 frames = 0;
                 ticks = 0;
                 timer += 1000;
@@ -95,6 +95,7 @@ public class Minedaft {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        assert digest != null;
         byte[] hash = digest.digest(in.getBytes(StandardCharsets.UTF_8));
 
         StringBuilder hexString = new StringBuilder();

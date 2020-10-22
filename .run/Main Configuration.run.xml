@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main Configuration" type="Application" factoryName="Application" singleton="false">
+    <option name="ALTERNATIVE_JRE_PATH" value="15" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
+    <option name="MAIN_CLASS_NAME" value="com.screendead.minedaft.Minedaft" />
+    <module name="Minedaft.main" />
+    <option name="PROGRAM_PARAMETERS" value="&quot;this is cryptographically secure&quot;" />
+    <option name="VM_PARAMETERS" value="-XstartOnFirstThread" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
