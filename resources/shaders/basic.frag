@@ -1,21 +1,35 @@
-#version 120
+#version 410
 
 uniform sampler2D tex;
+uniform vec3 viewPos;
+uniform vec3 lampPos;
 
-varying vec3 norms;
-varying vec2 tex_c;
+layout (location = 0) in vec3 fragPos;
+layout (location = 1) in vec3 normal;
+layout (location = 2) centroid in vec2 tex_coords;
 
-const float ambient = 0.3;
-float diffuse;
-vec4 color;
+out vec4 fragColor;
+
+const float ambientStrength = 2;
+const float diffuseStrength = 3;
+const float specularStrength = 3;
 
 void main() {
-    diffuse = max(ambient,
-    (dot(norms, vec3(0, -1, 0)) * 2 +
-    abs(dot(norms, vec3(1, 0, 0))) +
-    abs(dot(norms, vec3(0, 0, 1))) + 1) / 5);
+    float unit = 1 / (ambientStrength + diffuseStrength + specularStrength);
 
-    color = texture2D(tex, tex_c);
+    // Ambient
+    float ambient = ambientStrength * unit;
 
-    gl_FragColor = vec4(color.rgb * diffuse, color.a);
+    // Diffuse
+    float diffuse = diffuseStrength * unit * ((dot(normal, vec3(0, -1, 0)) + 1) / 2);
+
+    // Specular
+    vec3 lightDir = normalize(lampPos - fragPos);
+    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float specular = specularStrength * unit * pow(max(dot(viewDir, reflectDir), 0.0), 16);
+
+    vec4 t = texture(tex, tex_coords);
+
+    fragColor = vec4(t.rgb * (ambient + diffuse + specular), t.a);
 }

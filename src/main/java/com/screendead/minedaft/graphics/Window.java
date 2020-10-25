@@ -13,9 +13,12 @@ import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Locale;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
@@ -47,7 +50,8 @@ public class Window {
         initialWidth = width;
         initialHeight = height;
 
-        if (fullscreen) {
+
+        if (isFullscreen) {
             assert v != null;
             this.width = v.width();
             this.height = v.height();
@@ -62,6 +66,14 @@ public class Window {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable
         glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE); // The window will be alt-tabbable without iconifying
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
+
+        String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ROOT);
+        if ((OS.contains("mac")) || (OS.contains("darwin"))) {
+            glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GL_TRUE);
+        }
 
         // Create a handle for the window
         handle = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -92,22 +104,24 @@ public class Window {
 
         glfwSwapInterval(vsync);
 
-        if (isFullscreen) toggleFullscreen();
-
         input = new Input(this);
 
         // Make the window visible
         this.toggleVisibility();
+
+        if (isFullscreen) toggleFullscreen();
     }
 
     private void toggleFullscreen() {
-        toggleVisibility();
-
         fullscreen = !fullscreen;
 
         if (fullscreen) {
-            width = v.width();
-            height = v.height();
+//            width = v.width();
+//            height = v.height();
+
+            Vector2i size = this.getFrameBufferSize();
+            width = size.x;
+            height = size.y;
 
             // Toggle the window to fullscreen
             glfwSetWindowMonitor(handle, monitor, 0, 0, width, height, v.refreshRate());
@@ -124,8 +138,6 @@ public class Window {
         this.autoViewport();
 
         glfwSwapInterval(vsync);
-
-        toggleVisibility();
     }
 
     private void toggleVisibility() {
@@ -146,7 +158,7 @@ public class Window {
     public void update(int ticks) {
         if (input.keys[GLFW_KEY_ESCAPE])
             glfwSetWindowShouldClose(handle, true);
-        else if (input.keys[GLFW_KEY_F11])
+        else if (input.keys[GLFW_KEY_F])
             this.toggleFullscreen();
 
         if (key(GLFW_KEY_W))
@@ -162,12 +174,20 @@ public class Window {
         if (key(GLFW_KEY_LEFT_SHIFT))
             camera.move(0, -1, 0);
 
+        camera.zoom(key(GLFW_KEY_C));
+
         camera.update(input.dx, input.dy);
         input.dx = input.dy = 0;
 
+        if (camera.zoomed) renderer.setFOV(30.0f);
+        else renderer.setFOV(100.0f);
+        this.autoViewport();
+
+        renderer.lampPos = camera.pos;
+
         renderer.setTransform(0, 0, 0,
-                0, 0, 0,
-                1.0f, 1.0f, 1.0f);
+                    0, 0, 0,
+                    1.0f, 1.0f, 1.0f);
     }
 
     /**
@@ -217,7 +237,7 @@ public class Window {
      * Reset the viewport based on window size
      */
     private void autoViewport() {
-        Vector2i size = this.getSize();
+        Vector2i size = this.getFrameBufferSize();
 
         renderer.setViewport(size.x, size.y);
         renderer.render(camera);
@@ -261,10 +281,21 @@ public class Window {
     }
 
     /**
-     * @return the size of the window in pixels
+     * @return the size of the window in screen space pixels
      */
     public Vector2i getSize() {
-        return new Vector2i(this.width, this.height);
+        int[] x = new int[1], y = new int[1];
+        glfwGetWindowSize(this.handle, x, y);
+        return new Vector2i(x[0], y[0]);
+    }
+
+    /**
+     * @return the size of the frame buffer in pixels
+     */
+    public Vector2i getFrameBufferSize() {
+        int[] x = new int[1], y = new int[1];
+        glfwGetFramebufferSize(this.handle, x, y);
+        return new Vector2i(x[0], y[0]);
     }
 
     /**

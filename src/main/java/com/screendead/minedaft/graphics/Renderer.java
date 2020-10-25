@@ -1,7 +1,9 @@
 package com.screendead.minedaft.graphics;
 
+import com.screendead.minedaft.world.BlockType;
 import com.screendead.minedaft.world.World;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -10,7 +12,8 @@ import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 public class Renderer {
     private Shader shader;
     private World world;
-    private Matrix4f view = new Matrix4f();
+    private float width = 0, height = 0;
+    public Vector3f lampPos;
     private float fov = 100.0f;
 
     /**
@@ -23,12 +26,17 @@ public class Renderer {
         // Update the camera in the shader
         shader.bind();
             shader.setUniform("camera", camera.getMatrix());
+            shader.setUniform("viewPos", camera.pos);
+            shader.setUniform("lampPos", lampPos);
         Shader.unbind();
 
         // Render the chunk mesh
         shader.bind();
             world.render();
         Shader.unbind();
+
+//        cleanup();
+//        System.exit(0);
     }
 
     /**
@@ -45,12 +53,12 @@ public class Renderer {
         // Enable 2D texturing
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_CULL_FACE);
+        glEnable(GL_CULL_FACE);
         glEnable(GL_BLEND);
         glEnable(GL_MULTISAMPLE);
 
         // OpenGL settings
-//        glCullFace(GL_BACK);
+        glCullFace(GL_BACK);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Create texture and shader
@@ -60,16 +68,24 @@ public class Renderer {
         shader.addUniform("transform");
         shader.addUniform("camera");
         shader.addUniform("tex");
+        shader.addUniform("viewPos");
+        shader.addUniform("lampPos");
 
-        world = new World(8, 8);
+        int wh = 16;
+        world = new World(wh, wh);
+        lampPos = new Vector3f(8 * wh, 128, 8 * wh);
 
         // Set the sampler2D to 0
         shader.bind();
             shader.setUniform("tex", 0);
         Shader.unbind();
 
+        int[] rgb = new int[] {
+                64, 156, 255
+        };
+
         // Set the clear color
-        glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
+        glClearColor(rgb[0] / 255.0f, rgb[1] / 255.0f, rgb[2] / 255.0f, 1.0f);
     }
 
     /**
@@ -78,11 +94,14 @@ public class Renderer {
      * @param height The window height
      */
     public void setViewport(float width, float height) {
+        this.width = width;
+        this.height = height;
+
         // Set the viewport
         glViewport(0, 0, (int) width, (int) height);
 
         // Set the viewMatrix
-        view = new Matrix4f();
+        Matrix4f view = new Matrix4f();
         view.perspective((float) Math.toRadians(fov),
                 width / height, 0.01f, 65536.0f);
 
@@ -90,6 +109,14 @@ public class Renderer {
         shader.bind();
             shader.setUniform("view", view);
         Shader.unbind();
+    }
+
+    /**
+     * Set the FOV and update the view matrix accordingly
+     * @param fov The field of view in degrees.
+     */
+    public void setFOV(float fov) {
+        this.fov = fov;
     }
 
     /**

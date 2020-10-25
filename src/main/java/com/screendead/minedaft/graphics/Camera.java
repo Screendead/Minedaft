@@ -7,6 +7,7 @@ public class Camera {
     public Vector3f up = new Vector3f(0, 1, 0);
     public Vector3f look, right = new Vector3f();
     Vector3f pos, vel, acc;
+    public boolean zoomed = false;
     public float horizontal = 0, vertical = 0;
     private Matrix4f lookMatrix;
 
@@ -32,8 +33,8 @@ public class Camera {
     }
 
     public void update(float dx, float dy) {
-        horizontal += -dx / 4.0f;
-        vertical += (dy * 2) / 4.0f;
+        horizontal += -dx / 6.0f;
+        vertical += dy / 4.0f;
 
         horizontal = horizontal % 360.0f;
         vertical = constrain(vertical, -89.99f, 89.99f);
@@ -51,6 +52,10 @@ public class Camera {
         acc.zero();
 
         lookMatrix = new Matrix4f().lookAt(this.pos, this.pos.add(this.look, new Vector3f()), this.up);
+    }
+
+    public void zoom(boolean zoomed) {
+        this.zoomed = zoomed;
     }
 
     public void move(int walk, int fly, int strafe) {

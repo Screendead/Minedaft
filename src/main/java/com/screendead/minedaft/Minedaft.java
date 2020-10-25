@@ -60,7 +60,7 @@ public class Minedaft {
             }
 
             if (System.currentTimeMillis() - timer > 1000) {
-//                System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
+                System.out.printf("UPS: %s, FPS: %s%n", ticks, frames);
                 frames = 0;
                 ticks = 0;
                 timer += 1000;

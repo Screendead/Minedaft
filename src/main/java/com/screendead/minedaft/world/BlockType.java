@@ -5,137 +5,236 @@ import com.screendead.minedaft.graphics.MeshComponent;
 import java.util.ArrayList;
 
 public enum BlockType {
-    AIR(0, "air", new float[][] {}),
-    GRASS(1, "grass", new float[][] {
+    AIR(0, "air", true, new float[][] {}),
+    GRASS(1, "grass", false, new float[][] {
             new float[] { // +Z
-                    0.0f, 1.0f,
-                    0.0f, 0.0f,
                     1.0f, 1.0f,
                     1.0f, 0.0f,
+                    0.0f, 1.0f,
+                    0.0f, 0.0f,
             }, new float[] { // -Z
-                    0.0f, 1.0f,
-                    0.0f, 0.0f,
                     1.0f, 1.0f,
                     1.0f, 0.0f,
+                    0.0f, 1.0f,
+                    0.0f, 0.0f,
             }, new float[] { // +X
-                    0.0f, 1.0f,
-                    0.0f, 0.0f,
                     1.0f, 1.0f,
                     1.0f, 0.0f,
+                    0.0f, 1.0f,
+                    0.0f, 0.0f,
             }, new float[] { // -X
-                    0.0f, 1.0f,
-                    0.0f, 0.0f,
                     1.0f, 1.0f,
                     1.0f, 0.0f,
+                    0.0f, 1.0f,
+                    0.0f, 0.0f,
             }, new float[] { // +Y
-                    1.0f, 2.0f,
-                    1.0f, 1.0f,
                     0.0f, 2.0f,
                     0.0f, 1.0f,
+                    1.0f, 2.0f,
+                    1.0f, 1.0f,
             }, new float[] { // -Y
-                    1.0f, 1.0f,
-                    2.0f, 1.0f,
                     1.0f, 0.0f,
                     2.0f, 0.0f,
-            }
-    }),
-    DIRT(2, "dirt", new float[][] {
-            new float[] { // +Z
                     1.0f, 1.0f,
-                    2.0f, 1.0f,
-                    1.0f, 0.0f,
-                    2.0f, 0.0f,
-            }, new float[] { // -Z
-                    1.0f, 1.0f,
-                    2.0f, 1.0f,
-                    1.0f, 0.0f,
-                    2.0f, 0.0f,
-            }, new float[] { // +X
-                    1.0f, 1.0f,
-                    2.0f, 1.0f,
-                    1.0f, 0.0f,
-                    2.0f, 0.0f,
-            }, new float[] { // -X
-                    1.0f, 1.0f,
-                    2.0f, 1.0f,
-                    1.0f, 0.0f,
-                    2.0f, 0.0f,
-            }, new float[] { // +Y
-                    1.0f, 1.0f,
-                    2.0f, 1.0f,
-                    1.0f, 0.0f,
-                    2.0f, 0.0f,
-            }, new float[] { // -Y
-                    1.0f, 1.0f,
-                    2.0f, 1.0f,
-                    1.0f, 0.0f,
-                    2.0f, 0.0f,
-            }
-    }),
-    STONE(3, "stone", new float[][] {
-            new float[] { // +Z
-                    1.0f, 2.0f,
-                    1.0f, 1.0f,
-                    2.0f, 2.0f,
-                    2.0f, 1.0f,
-            }, new float[] { // -Z
-                    1.0f, 2.0f,
-                    1.0f, 1.0f,
-                    2.0f, 2.0f,
-                    2.0f, 1.0f,
-            }, new float[] { // +X
-                    1.0f, 2.0f,
-                    1.0f, 1.0f,
-                    2.0f, 2.0f,
-                    2.0f, 1.0f,
-            }, new float[] { // -X
-                    1.0f, 2.0f,
-                    1.0f, 1.0f,
-                    2.0f, 2.0f,
-                    2.0f, 1.0f,
-            }, new float[] { // +Y
-                    1.0f, 2.0f,
-                    1.0f, 1.0f,
-                    2.0f, 2.0f,
-                    2.0f, 1.0f,
-            }, new float[] { // -Y
-                    1.0f, 2.0f,
-                    1.0f, 1.0f,
-                    2.0f, 2.0f,
                     2.0f, 1.0f,
             }
     }),
-    BEDROCK(4, "bedrock", new float[][] {
+    DIRT(2, "dirt", false, new float[][] {
             new float[] { // +Z
-                    2.0f, 1.0f,
+                    1.0f, 0.0f,
                     2.0f, 0.0f,
-                    3.0f, 1.0f,
-                    3.0f, 0.0f,
+                    1.0f, 1.0f,
+                    2.0f, 1.0f,
             }, new float[] { // -Z
-                    2.0f, 1.0f,
+                    1.0f, 0.0f,
                     2.0f, 0.0f,
-                    3.0f, 1.0f,
-                    3.0f, 0.0f,
+                    1.0f, 1.0f,
+                    2.0f, 1.0f,
             }, new float[] { // +X
-                    2.0f, 1.0f,
+                    1.0f, 0.0f,
                     2.0f, 0.0f,
-                    3.0f, 1.0f,
-                    3.0f, 0.0f,
+                    1.0f, 1.0f,
+                    2.0f, 1.0f,
             }, new float[] { // -X
-                    2.0f, 1.0f,
+                    1.0f, 0.0f,
                     2.0f, 0.0f,
-                    3.0f, 1.0f,
-                    3.0f, 0.0f,
+                    1.0f, 1.0f,
+                    2.0f, 1.0f,
             }, new float[] { // +Y
-                    2.0f, 1.0f,
+                    1.0f, 0.0f,
                     2.0f, 0.0f,
-                    3.0f, 1.0f,
-                    3.0f, 0.0f,
+                    1.0f, 1.0f,
+                    2.0f, 1.0f,
             }, new float[] { // -Y
-                    2.0f, 1.0f,
+                    1.0f, 0.0f,
                     2.0f, 0.0f,
+                    1.0f, 1.0f,
+                    2.0f, 1.0f,
+            }
+    }),
+    STONE(3, "stone", false, new float[][] {
+            new float[] { // +Z
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+                    1.0f, 2.0f,
+                    1.0f, 1.0f,
+            }, new float[] { // -Z
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+                    1.0f, 2.0f,
+                    1.0f, 1.0f,
+            }, new float[] { // +X
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+                    1.0f, 2.0f,
+                    1.0f, 1.0f,
+            }, new float[] { // -X
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+                    1.0f, 2.0f,
+                    1.0f, 1.0f,
+            }, new float[] { // +Y
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+                    1.0f, 2.0f,
+                    1.0f, 1.0f,
+            }, new float[] { // -Y
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+                    1.0f, 2.0f,
+                    1.0f, 1.0f,
+            }
+    }),
+    BEDROCK(4, "bedrock", false, new float[][] {
+            new float[] { // +Z
                     3.0f, 1.0f,
                     3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f,
+            }, new float[] { // -Z
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f,
+            }, new float[] { // +X
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f,
+            }, new float[] { // -X
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f,
+            }, new float[] { // +Y
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f,
+            }, new float[] { // -Y
+                    3.0f, 1.0f,
+                    3.0f, 0.0f,
+                    2.0f, 1.0f,
+                    2.0f, 0.0f,
+            }
+    }),
+    TNT(5, "TNT", false, new float[][] {
+            new float[] { // +Z
+                    1.0f, 3.0f,
+                    1.0f, 2.0f,
+                    2.0f, 3.0f,
+                    2.0f, 2.0f,
+            }, new float[] { // -Z
+                    1.0f, 3.0f,
+                    1.0f, 2.0f,
+                    2.0f, 3.0f,
+                    2.0f, 2.0f,
+            }, new float[] { // +X
+                    1.0f, 3.0f,
+                    1.0f, 2.0f,
+                    2.0f, 3.0f,
+                    2.0f, 2.0f,
+            }, new float[] { // -X
+                    1.0f, 3.0f,
+                    1.0f, 2.0f,
+                    2.0f, 3.0f,
+                    2.0f, 2.0f,
+            }, new float[] { // +Y
+                    0.0f, 3.0f,
+                    0.0f, 2.0f,
+                    1.0f, 3.0f,
+                    1.0f, 2.0f,
+            }, new float[] { // -Y
+                    2.0f, 3.0f,
+                    2.0f, 2.0f,
+                    3.0f, 3.0f,
+                    3.0f, 2.0f,
+            }
+    }),
+    ICE(6, "ice", true, new float[][] {
+            new float[] { // +Z
+                    3.0f, 2.0f,
+                    3.0f, 1.0f,
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+            }, new float[] { // -Z
+                    3.0f, 2.0f,
+                    3.0f, 1.0f,
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+            }, new float[] { // +X
+                    3.0f, 2.0f,
+                    3.0f, 1.0f,
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+            }, new float[] { // -X
+                    3.0f, 2.0f,
+                    3.0f, 1.0f,
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+            }, new float[] { // +Y
+                    3.0f, 2.0f,
+                    3.0f, 1.0f,
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+            }, new float[] { // -Y
+                    3.0f, 2.0f,
+                    3.0f, 1.0f,
+                    2.0f, 2.0f,
+                    2.0f, 1.0f,
+            }
+    }),
+    DEBUG(8888, "debug", false, new float[][] {
+            new float[] { // +Z
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // -Z
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // +X
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // -X
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // +Y
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // -Y
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
             }
     });
 
@@ -200,15 +299,17 @@ public enum BlockType {
 
     private int id;
     private String name;
+    public boolean transparent;
     private float[][] texCoords;
 
-    BlockType(int id, String name, float[][] texCoords) {
+    BlockType(int id, String name, boolean transparent, float[][] texCoords) {
         this.id = id;
         this.name = name;
+        this.transparent = transparent;
         this.texCoords = texCoords;
     }
 
-    public MeshComponent getMeshComponent(boolean[] faces, int x, int y, int z, boolean shaded) {
+    public MeshComponent getMeshComponent(boolean[] faces, int x, int y, int z) {
         ArrayList<Integer> index = new ArrayList<>();
         for (int i = 0; i < 6; i++) if (faces[i]) index.add(i);
 
@@ -226,7 +327,7 @@ public enum BlockType {
             }
 
             for (int j = 0; j < 12; j++) {
-                n[i * 12 + j] = normals[(shaded && position == 4) ? 5 : position][j % 3];
+                n[i * 12 + j] = normals[position][j % 3];
             }
 
             for (int j = 0; j < 8; j++) {

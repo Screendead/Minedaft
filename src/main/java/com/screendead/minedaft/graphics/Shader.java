@@ -12,6 +12,8 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class Shader {
     private int program;
@@ -51,11 +53,13 @@ public class Shader {
         glBindAttribLocation(program, 1, "normals");
         glBindAttribLocation(program, 2, "tex_coords");
 
+        glBindVertexArray(glGenVertexArrays());
         // Link and validate the shaders
         glLinkProgram(program);
         if (glGetProgrami(program, GL_LINK_STATUS) != 1) throw new RuntimeException(glGetProgramInfoLog(program));
         glValidateProgram(program);
         if (glGetProgrami(program, GL_VALIDATE_STATUS) != 1) throw new RuntimeException(glGetProgramInfoLog(program));
+        glBindVertexArray(0);
     }
 
     /**

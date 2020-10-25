@@ -48,6 +48,7 @@ public class Input {
     }
 
     private void onKeyRelease(int key, int scancode, int mod) {
+        if (key == -1) return;
         keys[key] = false;
         mods[mod] = false;
     }
@@ -83,8 +84,6 @@ public class Input {
 
         dx = (float) (xpos - x);
         dy = (float) (ypos - y);
-
-        System.out.println("Mouse moved " + ++ mm + " times.");
     }
 
     private void onMouseScroll(double xoffset, double yoffset) {
