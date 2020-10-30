@@ -288,7 +288,7 @@ public enum BlockType {
             }
     };
 
-    private static int[] indices = new int[] {
+    private static final int[] indices = new int[] {
             0, 2, 1, 1, 2, 3,
             4, 6, 5, 5, 6, 7,
             8, 10, 9, 9, 10, 11,
@@ -297,10 +297,10 @@ public enum BlockType {
             20, 22, 21, 21, 22, 23
     };
 
-    private int id;
-    private String name;
-    public boolean transparent;
-    private float[][] texCoords;
+    private final int id;
+    private final String name;
+    public final boolean transparent;
+    private final float[][] texCoords;
 
     BlockType(int id, String name, boolean transparent, float[][] texCoords) {
         this.id = id;

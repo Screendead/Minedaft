@@ -9,9 +9,6 @@
     <option name="VM_PARAMETERS" value="-XstartOnFirstThread -Dorg.lwjgl.opengl.Display.enableHighDPI=true" />
     <method v="2">
       <option name="Make" enabled="true" />
-      <option name="BuildArtifacts" enabled="true">
-        <artifact name="Minedaft.main:jar" />
-      </option>
     </method>
   </configuration>
 </component>

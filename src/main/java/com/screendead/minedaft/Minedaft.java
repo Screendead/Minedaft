@@ -12,14 +12,14 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 public class Minedaft {
     private Window window;
-    private float UPS = 60.0f, FPS = 60.0f;
+    private static final float UPS = 40.0f, FPS = 60.0f;
 
     /**
      * Begin the game
      */
     private void run() {
         // Create the window
-        window = new Window("Minedaft", 1080, 720, false, true);
+        window = new Window("Minedaft", 2560/2, 1440/2, false, true);
 
         // Start the game loop
         loop();
@@ -47,9 +47,9 @@ public class Minedaft {
 
             if (deltaU >= 1) {
                 glfwPollEvents();
-                window.update(totalTicks);
                 ticks++;
                 totalTicks++;
+                window.update(totalTicks);
                 deltaU--;
             }
 

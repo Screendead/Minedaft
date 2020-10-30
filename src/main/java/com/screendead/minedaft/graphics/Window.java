@@ -98,7 +98,7 @@ public class Window {
         glfwMakeContextCurrent(handle);
         renderer.init();
 
-        camera = new Camera(new Vector3f(16.0f, 128.0f, 16.0f));
+        camera = new Camera(new Vector3f(0.0f, 128.0f, 0.0f));
 
         this.autoViewport();
 
@@ -106,10 +106,10 @@ public class Window {
 
         input = new Input(this);
 
+        if (isFullscreen) toggleFullscreen();
+
         // Make the window visible
         this.toggleVisibility();
-
-        if (isFullscreen) toggleFullscreen();
     }
 
     private void toggleFullscreen() {
@@ -188,6 +188,8 @@ public class Window {
         renderer.setTransform(0, 0, 0,
                     0, 0, 0,
                     1.0f, 1.0f, 1.0f);
+
+        if (ticks % 8 == 0) renderer.world.update();
     }
 
     /**

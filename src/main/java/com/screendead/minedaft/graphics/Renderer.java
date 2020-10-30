@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 
 public class Renderer {
     private Shader shader;
-    private World world;
+    World world;
     private float width = 0, height = 0;
     public Vector3f lampPos;
     private float fov = 100.0f;
@@ -34,9 +34,6 @@ public class Renderer {
         shader.bind();
             world.render();
         Shader.unbind();
-
-//        cleanup();
-//        System.exit(0);
     }
 
     /**
@@ -71,7 +68,7 @@ public class Renderer {
         shader.addUniform("viewPos");
         shader.addUniform("lampPos");
 
-        int wh = 16;
+        int wh = 20;
         world = new World(wh, wh);
         lampPos = new Vector3f(8 * wh, 128, 8 * wh);
 

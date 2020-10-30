@@ -1,0 +1,2 @@
+Pre-threading: World generation (256 chunks) took 20.071s
+Post-threading: World generation (256 chunks) took 1.927s

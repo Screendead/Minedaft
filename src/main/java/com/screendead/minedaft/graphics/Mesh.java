@@ -106,10 +106,10 @@ public class Mesh {
             glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
 
             // Restore state
-//            glDisableVertexAttribArray(0);
-//            glDisableVertexAttribArray(1);
-//            glDisableVertexAttribArray(2);
-//            glBindVertexArray(0);
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+            glDisableVertexAttribArray(2);
+            glBindVertexArray(0);
         }
     }
 
