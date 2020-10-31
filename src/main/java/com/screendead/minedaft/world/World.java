@@ -7,8 +7,8 @@ import org.lwjgl.stb.STBPerlin;
 public class World {
     private final ChunkManager chunkManager;
 
-    public World(int xSize, int zSize) {
-        this.chunkManager = new ChunkManager(xSize, zSize);
+    public World(int renderDistance) {
+        this.chunkManager = new ChunkManager(renderDistance);
 
         chunkManager.generate();
     }

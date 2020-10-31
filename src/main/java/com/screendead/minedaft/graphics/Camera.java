@@ -50,7 +50,7 @@ public class Camera {
         this.look.rotateAxis((float) Math.toRadians(vertical), right.x, right.y, right.z);
 
         vel.add(acc);
-        vel.mul(0.99f);
+        vel.mul(0.93f);
         pos.add(vel);
         acc.zero();
 

@@ -9,6 +9,8 @@ import org.lwjgl.stb.STBPerlin;
 import java.util.Arrays;
 
 public class Chunk {
+    private static final boolean SIMPLE_GENERATION = false;
+
     public static final Chunk EMPTY = new Chunk();
 
     private static float SCALE = 0.005f;
@@ -43,37 +45,6 @@ public class Chunk {
             }
         }
 
-//        for (int i = 0; i < 16; i++) {
-//            for (int j = 0; j < 16; j++) {
-////                float x = (float) (i + (cx << 4)) * Chunk.SCALE,
-////                        z = (float) (j + (cz << 4)) * Chunk.SCALE;
-////                float height = 0.0f;
-////                float height = 64.0f * (STBPerlin.stb_perlin_noise3(x, 0, z, 0, 0, 0) - 0.5f);
-//                for (int k = 0; k < 256; k++) {
-//                    int index = flatten(i, j, k);
-//////                    float detail = 64.0f;
-//////                    float detail = 64.0f * (STBPerlin.stb_perlin_noise3(x, k * dScale, z, 0, 0, 0) - 0.5f);
-//////                    float detail = 64.0f * (STBPerlin.stb_perlin_turbulence_noise3(x, k * Chunk.D_SCALE, z, 1.2f, 0.35f, 3) + 1);
-////                    float detail = 128.0f * (STBPerlin.stb_perlin_turbulence_noise3(x, k * Chunk.D_SCALE, z, 2.0f, 0.5f, 5) - 0.5f);
-////
-//////                    float detail = STBPerlin.stb_perlin_turbulence_noise3(x, k * Chunk.D_SCALE, z, 1.5f, 0.5f, 12);
-//////                    float detail2 = STBPerlin.stb_perlin_noise3(x * 10.0f + 1000.0f, k * Chunk.D_SCALE * 10.0f + 1000.0f, z * 10.0f + 1000.0f, 0, 0, 0);
-////
-////                    BlockType type;
-////
-////                    if (k == 0) type = BlockType.BEDROCK;
-//////                    else if (detail < 0.5f) type = BlockType.STONE;
-//////                    if (detail < 0.5f) type = BlockType.STONE;
-//////                    if (detail < 0.5f && detail2 < 0.0f && Math.pow(cx * 16 + i - 128.0f, 2) + Math.pow(k - 128.0f, 2) + Math.pow(cz * 16 + j - 128.0f, 2) <= Math.pow(128.0f, 2)) type = BlockType.DEBUG;
-////                    else if (k*k <= height*height + detail*detail) type = BlockType.STONE;
-////                    else if (k <= height - detail) type = (Math.random() < 0.1) ? BlockType.TNT : BlockType.STONE;
-////                    else type = BlockType.AIR;
-////
-//                    b[index] = new Block(generateBlock(cx, cz, i, k, j), new Vector3i(i + (cx << 4), k, j + (cz << 4)));
-//                }
-//            }
-//        }
-
         Chunk c = new Chunk(cx, cz, b);
         c.generateMeshComponent();
 
@@ -81,16 +52,21 @@ public class Chunk {
     }
 
     private static BlockType generateBlock(int cx, int cz, int x, int y, int z) {
-        float i = (float) (x + (cx << 4)) * Chunk.SCALE,
-                j = (float) (z + (cz << 4)) * Chunk.SCALE,
-            k = (float) y * Chunk.D_SCALE;
+        if (Chunk.SIMPLE_GENERATION) {
+            if (y < 64) return BlockType.STONE;
+            else return BlockType.AIR;
+        } else {
+            float i = (float) (x + (cx << 4)) * Chunk.SCALE,
+                    j = (float) (z + (cz << 4)) * Chunk.SCALE,
+                    k = (float) y * Chunk.D_SCALE;
 
-        float height = 64.0f * (STBPerlin.stb_perlin_noise3(i, 0, j, 0, 0, 0) - 0.5f);
-        float detail = 128.0f * (STBPerlin.stb_perlin_turbulence_noise3(i, k, j, 2.0f, 0.5f, 5) - 0.5f);
+            float height = 128.0f * (STBPerlin.stb_perlin_noise3(i, 0, j, 0, 0, 0) - 0.5f);
+            float detail = 128.0f * (STBPerlin.stb_perlin_turbulence_noise3(i, k, j, 2.0f, 0.5f, 5) - 0.5f);
 
-        if (k == 0) return BlockType.BEDROCK;
-        else if (detail < 0.3f) return BlockType.STONE;
-        else return BlockType.AIR;
+            if (k == 0) return BlockType.BEDROCK;
+            else if (detail < height) return BlockType.STONE;
+            else return BlockType.AIR;
+        }
     }
 
     private void generateMeshComponent() {

@@ -68,9 +68,9 @@ public class Renderer {
         shader.addUniform("viewPos");
         shader.addUniform("lampPos");
 
-        int wh = 20;
-        world = new World(wh, wh);
-        lampPos = new Vector3f(8 * wh, 128, 8 * wh);
+        int renderDistance = 16;
+        world = new World(renderDistance);
+        lampPos = new Vector3f(8 * renderDistance, 128, 8 * renderDistance);
 
         // Set the sampler2D to 0
         shader.bind();
