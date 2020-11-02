@@ -6,39 +6,39 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_FLOAT;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL15.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL15.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL15.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL15.glActiveTexture;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBindTexture;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
-import static org.lwjgl.opengl.GL15.glDrawElements;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Mesh {
+    private static final int DRAW_TYPE = GL_STREAM_DRAW;
+    public static final Mesh EMPTY = new Mesh();
+
     private static Image texture;
     private static ArrayList<Integer> vboList = new ArrayList<>();
     private final int vao, vertexCount;
+    private final boolean empty;
 
     public Mesh(float[] positions, float[] normals, float[] texCoords, int[] indices) {
+        empty = false;
+        vertexCount = indices.length;
+        vao = glGenVertexArrays();
+
+        update(positions, normals, texCoords, indices);
+    }
+
+    private Mesh() {
+        empty = true;
+        this.vao = -1;
+        this.vertexCount = 0;
+    }
+
+    public void update(float[] positions, float[] normals, float[] texCoords, int[] indices) {
         FloatBuffer vertBuffer = null, normsBuffer = null, texBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
-            vertexCount = indices.length;
             vboList = new ArrayList<>();
 
-            vao = glGenVertexArrays();
             glBindVertexArray(vao);
 
             // Position VBO
@@ -47,7 +47,7 @@ public class Mesh {
             vertBuffer = MemoryUtil.memAllocFloat(positions.length);
             vertBuffer.put(positions).flip();
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, vertBuffer, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertBuffer, DRAW_TYPE);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
             // Normals VBO
@@ -56,7 +56,7 @@ public class Mesh {
             normsBuffer = MemoryUtil.memAllocFloat(normals.length);
             normsBuffer.put(normals).flip();
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, normsBuffer, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, normsBuffer, DRAW_TYPE);
             glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
             for (int i = 0; i < texCoords.length; i++) texCoords[i] /= ((float) ((i % 2 == 0) ? texture.getSize().x : texture.getSize().y) / 16.0f);
@@ -67,7 +67,7 @@ public class Mesh {
             texBuffer = MemoryUtil.memAllocFloat(texCoords.length);
             texBuffer.put(texCoords).flip();
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, texBuffer, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, texBuffer, DRAW_TYPE);
             glVertexAttribPointer(2, 2, GL_FLOAT, true, 0, 0);
 
             // Index VBO
@@ -76,7 +76,7 @@ public class Mesh {
             indicesBuffer = MemoryUtil.memAllocInt(indices.length);
             indicesBuffer.put(indices).flip();
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, DRAW_TYPE);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
         } finally {
@@ -87,11 +87,15 @@ public class Mesh {
         }
     }
 
+    public void update(MeshComponent mc) {
+        update(mc.getVertices(), mc.getNormals(), mc.getTexCoords(), mc.getIndices());
+    }
+
     /**
      * Render this mesh to the framebuffer
      */
     public void render() {
-        if (texture != null) {
+        if (texture != null && !this.empty) {
             // Activate first texture
             glActiveTexture(GL_TEXTURE0);
             // Bind the texture

@@ -1,8 +1,6 @@
 package com.screendead.minedaft.world;
 
-import com.screendead.minedaft.graphics.MeshComponent;
 import com.screendead.minedaft.performance.ChunkManager;
-import org.lwjgl.stb.STBPerlin;
 
 public class World {
     private final ChunkManager chunkManager;
@@ -13,16 +11,18 @@ public class World {
         chunkManager.generate();
     }
 
-    public void update() {
+    /**
+     * @param cx The X position, in chunk co-ordinates, of the camera.
+     * @param cz The Z position, in chunk co-ordinates, of the camera.
+     */
+    public void update(int cx, int cz) {
 //        int poll = chunkManager.poll();
 //        if (poll != -1) chunks[poll % xSize][(poll / xSize) % zSize] = chunkManager.get(poll);
-        chunkManager.poll();
+        chunkManager.poll(cx, cz);
     }
 
     public void render() {
-        for (Chunk c : chunkManager.data) {
-            if (c != null) c.render();
-        }
+        chunkManager.data.forEach(Chunk::render);
     }
 
 //    private BlockType getBlock(int cx, int cz, int x, int y, int z) {

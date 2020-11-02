@@ -1,6 +1,5 @@
 package com.screendead.minedaft.graphics;
 
-import com.screendead.minedaft.world.BlockType;
 import com.screendead.minedaft.world.World;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -13,7 +12,7 @@ public class Renderer {
     private Shader shader;
     World world;
     private float width = 0, height = 0;
-    public Vector3f lampPos;
+//    public Vector3f lampPos;
     private float fov = 100.0f;
 
     /**
@@ -26,8 +25,8 @@ public class Renderer {
         // Update the camera in the shader
         shader.bind();
             shader.setUniform("camera", camera.getMatrix());
-            shader.setUniform("viewPos", camera.pos);
-            shader.setUniform("lampPos", lampPos);
+//            shader.setUniform("viewPos", camera.pos);
+//            shader.setUniform("lampPos", lampPos);
         Shader.unbind();
 
         // Render the chunk mesh
@@ -65,12 +64,12 @@ public class Renderer {
         shader.addUniform("transform");
         shader.addUniform("camera");
         shader.addUniform("tex");
-        shader.addUniform("viewPos");
-        shader.addUniform("lampPos");
+//        shader.addUniform("viewPos");
+//        shader.addUniform("lampPos");
 
-        int renderDistance = 16;
+        int renderDistance = 8;
         world = new World(renderDistance);
-        lampPos = new Vector3f(8 * renderDistance, 128, 8 * renderDistance);
+//        lampPos = new Vector3f(8 * renderDistance, 128, 8 * renderDistance);
 
         // Set the sampler2D to 0
         shader.bind();

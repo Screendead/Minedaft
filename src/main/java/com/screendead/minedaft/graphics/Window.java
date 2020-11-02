@@ -17,7 +17,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -98,7 +97,7 @@ public class Window {
         glfwMakeContextCurrent(handle);
         renderer.init();
 
-        camera = new Camera(new Vector3f(0.0f, 67.0f, 0.0f));
+        camera = new Camera(new Vector3f(8.0f, 67.0f, 8.0f));
 
         this.autoViewport();
 
@@ -183,13 +182,16 @@ public class Window {
         else renderer.setFOV(100.0f);
         this.autoViewport();
 
-        renderer.lampPos = camera.pos;
+//        renderer.lampPos = camera.pos;
 
         renderer.setTransform(0, 0, 0,
                     0, 0, 0,
                     1.0f, 1.0f, 1.0f);
 
-        if (ticks % 8 == 0) renderer.world.update();
+        int cx = (int) camera.pos.x >> 4;
+        int cz = (int) camera.pos.z >> 4;
+
+        if (ticks % 8 == 0) renderer.world.update(cx, cz);
     }
 
     /**

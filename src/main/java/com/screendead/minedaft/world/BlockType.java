@@ -5,8 +5,41 @@ import com.screendead.minedaft.graphics.MeshComponent;
 import java.util.ArrayList;
 
 public enum BlockType {
-    AIR(0, "air", true, new float[][] {}),
-    GRASS(1, "grass", false, new float[][] {
+    DEBUG("debug", false, new float[][] {
+            new float[] { // +Z
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // -Z
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // +X
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // -X
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // +Y
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }, new float[] { // -Y
+                    15.0f, 16.0f,
+                    15.0f, 15.0f,
+                    16.0f, 16.0f,
+                    16.0f, 15.0f,
+            }
+    }),
+    AIR("air", true, new float[][] {}),
+    GRASS("grass", false, new float[][] {
             new float[] { // +Z
                     1.0f, 1.0f,
                     1.0f, 0.0f,
@@ -39,7 +72,7 @@ public enum BlockType {
                     2.0f, 1.0f,
             }
     }),
-    DIRT(2, "dirt", false, new float[][] {
+    DIRT("dirt", false, new float[][] {
             new float[] { // +Z
                     1.0f, 0.0f,
                     2.0f, 0.0f,
@@ -72,7 +105,7 @@ public enum BlockType {
                     2.0f, 1.0f,
             }
     }),
-    STONE(3, "stone", false, new float[][] {
+    STONE("stone", false, new float[][] {
             new float[] { // +Z
                     2.0f, 2.0f,
                     2.0f, 1.0f,
@@ -105,7 +138,7 @@ public enum BlockType {
                     1.0f, 1.0f,
             }
     }),
-    BEDROCK(4, "bedrock", false, new float[][] {
+    BEDROCK("bedrock", false, new float[][] {
             new float[] { // +Z
                     3.0f, 1.0f,
                     3.0f, 0.0f,
@@ -138,7 +171,7 @@ public enum BlockType {
                     2.0f, 0.0f,
             }
     }),
-    TNT(5, "TNT", false, new float[][] {
+    TNT("TNT", false, new float[][] {
             new float[] { // +Z
                     1.0f, 3.0f,
                     1.0f, 2.0f,
@@ -171,7 +204,7 @@ public enum BlockType {
                     3.0f, 2.0f,
             }
     }),
-    ICE(6, "ice", true, new float[][] {
+    ICE("ice", true, new float[][] {
             new float[] { // +Z
                     3.0f, 2.0f,
                     3.0f, 1.0f,
@@ -202,39 +235,6 @@ public enum BlockType {
                     3.0f, 1.0f,
                     2.0f, 2.0f,
                     2.0f, 1.0f,
-            }
-    }),
-    DEBUG(8888, "debug", false, new float[][] {
-            new float[] { // +Z
-                    15.0f, 16.0f,
-                    15.0f, 15.0f,
-                    16.0f, 16.0f,
-                    16.0f, 15.0f,
-            }, new float[] { // -Z
-                    15.0f, 16.0f,
-                    15.0f, 15.0f,
-                    16.0f, 16.0f,
-                    16.0f, 15.0f,
-            }, new float[] { // +X
-                    15.0f, 16.0f,
-                    15.0f, 15.0f,
-                    16.0f, 16.0f,
-                    16.0f, 15.0f,
-            }, new float[] { // -X
-                    15.0f, 16.0f,
-                    15.0f, 15.0f,
-                    16.0f, 16.0f,
-                    16.0f, 15.0f,
-            }, new float[] { // +Y
-                    15.0f, 16.0f,
-                    15.0f, 15.0f,
-                    16.0f, 16.0f,
-                    16.0f, 15.0f,
-            }, new float[] { // -Y
-                    15.0f, 16.0f,
-                    15.0f, 15.0f,
-                    16.0f, 16.0f,
-                    16.0f, 15.0f,
             }
     });
 
@@ -297,13 +297,11 @@ public enum BlockType {
             20, 22, 21, 21, 22, 23
     };
 
-    private final int id;
     private final String name;
     public final boolean transparent;
     private final float[][] texCoords;
 
-    BlockType(int id, String name, boolean transparent, float[][] texCoords) {
-        this.id = id;
+    BlockType(String name, boolean transparent, float[][] texCoords) {
         this.name = name;
         this.transparent = transparent;
         this.texCoords = texCoords;
@@ -340,8 +338,8 @@ public enum BlockType {
         return new MeshComponent(v, n, t, mi);
     }
 
-    public int getID() {
-        return id;
+    public BlockType get(int id) {
+        return BlockType.values()[id];
     }
 
     public String getName() {

@@ -5,7 +5,6 @@ import java.util.Arrays;
 public class MeshComponent {
     private float[] vertices, normals, texCoords;
     private int[] indices;
-    private int maxIndex;
 
     public MeshComponent(float[] vertices, float[] normals, float[] texCoords, int[] indices) {
         this.vertices = vertices;
@@ -14,8 +13,12 @@ public class MeshComponent {
         this.indices = indices;
     }
 
+    public MeshComponent() {
+        this(new float[] {}, new float[] {}, new float[] {}, new int[] {});
+    }
+
     public void combine(MeshComponent m) {
-        maxIndex = 0;
+        int maxIndex = 0;
         float[] newVertices, newNormals, newTexCoords;
         int[] newIndices;
 
@@ -40,5 +43,21 @@ public class MeshComponent {
 
     public Mesh toMesh() {
         return new Mesh(vertices, normals, texCoords, indices);
+    }
+
+    public float[] getVertices() {
+        return vertices;
+    }
+
+    public float[] getNormals() {
+        return normals;
+    }
+
+    public float[] getTexCoords() {
+        return texCoords;
+    }
+
+    public int[] getIndices() {
+        return indices;
     }
 }

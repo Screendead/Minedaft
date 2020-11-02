@@ -14,12 +14,8 @@ public class Camera {
     public float horizontal = 0, vertical = 0;
     private Matrix4f lookMatrix;
 
-    public Camera() {
-        this(new Vector3f(0, 1, 0));
-    }
-
     public Camera(Vector3f pos) {
-        this(pos, new Vector3f(1, -1, 1));
+        this(pos, new Vector3f(0, 0, 1));
     }
 
     public Camera(Vector3f pos, Vector3f look) {
