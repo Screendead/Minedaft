@@ -97,7 +97,7 @@ public class Window {
         glfwMakeContextCurrent(handle);
         renderer.init();
 
-        camera = new Camera(new Vector3f(8.0f, 67.0f, 8.0f));
+        camera = new Camera(new Vector3f(8.0f, 128.0f, 8.0f));
 
         this.autoViewport();
 
@@ -191,7 +191,8 @@ public class Window {
         int cx = (int) camera.pos.x >> 4;
         int cz = (int) camera.pos.z >> 4;
 
-        if (ticks % 8 == 0) renderer.world.update(cx, cz);
+        renderer.world.update(cx, cz);
+        if (ticks % 8 == 0) renderer.world.poll(cx, cz);
     }
 
     /**

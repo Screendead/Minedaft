@@ -15,6 +15,8 @@ public class Renderer {
 //    public Vector3f lampPos;
     private float fov = 100.0f;
 
+    Matrix4f view = new Matrix4f(), transform = new Matrix4f();
+
     /**
      * Render to the framebuffer
      */
@@ -31,7 +33,7 @@ public class Renderer {
 
         // Render the chunk mesh
         shader.bind();
-            world.render();
+            world.render(width, height, view, transform, camera.getMatrix());
         Shader.unbind();
     }
 
@@ -67,7 +69,7 @@ public class Renderer {
 //        shader.addUniform("viewPos");
 //        shader.addUniform("lampPos");
 
-        int renderDistance = 8;
+        int renderDistance = 16;
         world = new World(renderDistance);
 //        lampPos = new Vector3f(8 * renderDistance, 128, 8 * renderDistance);
 
@@ -77,7 +79,7 @@ public class Renderer {
         Shader.unbind();
 
         int[] rgb = new int[] {
-                64, 156, 255
+                0, 0, 0
         };
 
         // Set the clear color
@@ -97,8 +99,8 @@ public class Renderer {
         glViewport(0, 0, (int) width, (int) height);
 
         // Set the viewMatrix
-        Matrix4f view = new Matrix4f();
-        view.perspective((float) Math.toRadians(fov),
+        view = new Matrix4f()
+                .perspective((float) Math.toRadians(fov),
                 width / height, 0.01f, 65536.0f);
 
         // Update the viewMatrix in the shader
@@ -129,10 +131,13 @@ public class Renderer {
      * @param sz Z component of the scale
      */
     public void setTransform(float dx, float dy, float dz, float rx, float ry, float rz, float sx, float sy, float sz) {
+        transform = new Matrix4f()
+                .translation(dx, dy, dz)
+                .rotateYXZ((float) Math.toRadians(ry), (float) Math.toRadians(rx), (float) Math.toRadians(rz))
+                .scale(sx, sy, sz);
+
         shader.bind();
-            shader.setUniform("transform", new Matrix4f().translation(dx, dy, dz)
-                    .rotateYXZ((float) Math.toRadians(ry), (float) Math.toRadians(rx), (float) Math.toRadians(rz))
-                    .scale(sx, sy, sz));
+            shader.setUniform("transform", transform);
         Shader.unbind();
     }
 

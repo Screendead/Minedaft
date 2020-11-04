@@ -5,7 +5,7 @@ import com.screendead.minedaft.graphics.MeshComponent;
 import org.lwjgl.stb.STBPerlin;
 
 public class Chunk {
-    private static final boolean SIMPLE_GENERATION = true;
+    private static final boolean SIMPLE_GENERATION = false;
 
     private static final float SCALE = 0.005f;
     private static final float D_SCALE = 0.005f;
@@ -42,18 +42,19 @@ public class Chunk {
 
     private static int generateBlock(int cx, int cz, int x, int y, int z) {
         if (Chunk.SIMPLE_GENERATION) {
-            if (y < 64) return BlockType.STONE.ordinal();
+            if (y < 8) return BlockType.STONE.ordinal();
             else return BlockType.AIR.ordinal();
         } else {
             float i = (float) (x + (cx << 4)) * Chunk.SCALE,
                     j = (float) (z + (cz << 4)) * Chunk.SCALE,
                     k = (float) y * Chunk.D_SCALE;
 
-            float height = 128.0f * (STBPerlin.stb_perlin_noise3(i, 0, j, 0, 0, 0) - 0.5f);
-            float detail = 128.0f * (STBPerlin.stb_perlin_turbulence_noise3(i, k, j, 2.0f, 0.5f, 5) - 0.5f);
+            float height = 64.0f * STBPerlin.stb_perlin_turbulence_noise3(i * 0.25f, k * 0.25f, j * 0.25f, 2, 0.5f, 6);
+            float detail = 256.0f * STBPerlin.stb_perlin_turbulence_noise3(i, k, j, 2, 0.5f, 6);
+            float detailDivisor = 16.0f * STBPerlin.stb_perlin_ridge_noise3(i, 0, j, 2, 0.5f, 0, 4);
 
-            if (k == 0) return BlockType.BEDROCK.ordinal();
-            else if (detail < height) return BlockType.STONE.ordinal();
+            if (y == 0) return BlockType.BEDROCK.ordinal();
+            else if (y <= height + detail / detailDivisor) return BlockType.STONE.ordinal();
             else return BlockType.AIR.ordinal();
         }
     }

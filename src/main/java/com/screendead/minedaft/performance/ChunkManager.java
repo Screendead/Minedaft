@@ -1,7 +1,10 @@
 package com.screendead.minedaft.performance;
 
-import com.screendead.minedaft.graphics.Mesh;
 import com.screendead.minedaft.world.Chunk;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,11 +22,13 @@ public class ChunkManager {
     List<int[]> locations = new ArrayList<>();
     List<Future<Chunk>> futures = new ArrayList<>();
 
+    private Vector3i camPos = new Vector3i();
+
     public ChunkManager(int renderDistance) {
         this.renderDistance = renderDistance;
 
         pool = Executors.newScheduledThreadPool(0);
-//        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() / 2 - 1);
+//        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() / 2 - 2);
 //        pool = Executors.newFixedThreadPool(xSize * zSize);
     }
 
@@ -31,10 +36,25 @@ public class ChunkManager {
         smartGenAroundPlayer(new int[]{0, 0});
     }
 
-    public void poll(int cx, int cz) {
+    public void update(int cx, int cz) {
+        camPos.x = cx;
+        camPos.z = cz;
         smartGenAroundPlayer(new int[]{cx, cz});
+    }
 
+    public void poll(int cx, int cz) {
         if (futures.size() == 0) return;
+
+        for (int i = locations.size() - 1; i >= 0; i--) {
+            if (locations.get(i)[0] > renderDistance + cx
+                    || locations.get(i)[0] < -renderDistance + cx
+                    || locations.get(i)[1] > renderDistance + cz
+                    || locations.get(i)[1] < -renderDistance + cz) {
+                futures.get(i).cancel(true);
+                futures.remove(i);
+                locations.remove(i);
+            }
+        }
 
         for (int i = futures.size() - 1; i >= 0; i--) {
             if (!futures.get(i).isDone()) continue;
@@ -64,12 +84,31 @@ public class ChunkManager {
         }
     }
 
+    public void render(float w, float h, Matrix4f view, Matrix4f transform, Matrix4f camera) {
+//        Matrix4f mx = new Matrix4f(view)
+//                .mul(transform)
+//                .mul(camera)
+//                .frustumLH(-w/2, w/2, -h/2, h/2, 10, 1e9f);
+
+        this.data.forEach(Chunk::render);
+
+//        this.data.forEach(chunk -> {
+//            if (mx.testAab(chunk.cx * 16, 0, chunk.cz * 16, (chunk.cx + 1) * 16, 256, (chunk.cz + 1) * 16)) {
+//            Vector4f xz = new Vector4f(chunk.cx * 16 + 8, 128, chunk.cz * 16 + 8, 1);
+//            xz.mul(mx);
+
+//            if (mx.testPoint(xz.x, xz.y, xz.z)) {
+//                chunk.render();
+//            }
+//        });
+    }
+
     private void smartGenAroundPlayer(int[] cxcz) {
         int cx = cxcz[0];
         int cz = cxcz[1];
 
         smartAddChunkToQueue(cxcz);
-        for (int i = 0; i < renderDistance; i++) {
+        for (int i = 0; i <= renderDistance * 2; i++) {
             for (int x = i; x > -i; x--) {
                 if (Math.abs(x) == i) {
                     smartAddChunkToQueue(new int[]{cx + x, cz});
@@ -83,9 +122,13 @@ public class ChunkManager {
     }
 
     private void smartAddChunkToQueue(int[] cxcz) {
-        if (contains(locations, cxcz)) return;
-        locations.add(cxcz);
+        if (cxcz[0] > camPos.x + renderDistance
+                || cxcz[0] < camPos.x - renderDistance
+                || cxcz[1] > camPos.z + renderDistance
+                || cxcz[1] < camPos.z - renderDistance) return;
+        if (contains(locations, cxcz) || contains(generated, cxcz)) return;
 
+        locations.add(cxcz);
         futures.add(pool.submit(() -> Chunk.generate(cxcz[0], cxcz[1])));
     }
 
