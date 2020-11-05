@@ -12,25 +12,21 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class Mesh {
     private static final int DRAW_TYPE = GL_STREAM_DRAW;
-    public static final Mesh EMPTY = new Mesh();
 
     private static Image texture;
     private static ArrayList<Integer> vboList = new ArrayList<>();
     private final int vao, vertexCount;
-    private final boolean empty;
 
     public Mesh(float[] positions, float[] normals, float[] texCoords, int[] indices) {
-        empty = false;
         vertexCount = indices.length;
+        if (vertexCount == 0) {
+            vao = -1;
+            return;
+        }
+
         vao = glGenVertexArrays();
 
         update(positions, normals, texCoords, indices);
-    }
-
-    private Mesh() {
-        empty = true;
-        this.vao = -1;
-        this.vertexCount = 0;
     }
 
     public void update(float[] positions, float[] normals, float[] texCoords, int[] indices) {
@@ -95,7 +91,7 @@ public class Mesh {
      * Render this mesh to the framebuffer
      */
     public void render() {
-        if (texture != null && !this.empty) {
+        if (texture != null) {
             // Activate first texture
             glActiveTexture(GL_TEXTURE0);
             // Bind the texture
@@ -150,5 +146,9 @@ public class Mesh {
      */
     public int getVertexCount() {
         return vertexCount;
+    }
+
+    public boolean empty() {
+        return vertexCount == 0;
     }
 }

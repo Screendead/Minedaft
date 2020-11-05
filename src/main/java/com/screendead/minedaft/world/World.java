@@ -26,8 +26,8 @@ public class World {
         chunkManager.poll(cx, cz);
     }
 
-    public void render(float w, float h, Matrix4f view, Matrix4f transform, Matrix4f camera) {
-        chunkManager.render(w, h, view, transform, camera);
+    public void render(Matrix4f view, Matrix4f transform, Matrix4f camera) {
+        chunkManager.render(view, transform, camera);
     }
 
 //    private BlockType getBlock(int cx, int cz, int x, int y, int z) {

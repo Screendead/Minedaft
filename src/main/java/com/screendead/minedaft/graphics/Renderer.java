@@ -14,6 +14,7 @@ public class Renderer {
     private float width = 0, height = 0;
 //    public Vector3f lampPos;
     private float fov = 100.0f;
+    private int renderDistance;
 
     Matrix4f view = new Matrix4f(), transform = new Matrix4f();
 
@@ -33,7 +34,7 @@ public class Renderer {
 
         // Render the chunk mesh
         shader.bind();
-            world.render(width, height, view, transform, camera.getMatrix());
+            world.render(view, transform, camera.getMatrix());
         Shader.unbind();
     }
 
@@ -69,8 +70,8 @@ public class Renderer {
 //        shader.addUniform("viewPos");
 //        shader.addUniform("lampPos");
 
-        int renderDistance = 16;
-        world = new World(renderDistance);
+        this.renderDistance = 16;
+        world = new World(this.renderDistance);
 //        lampPos = new Vector3f(8 * renderDistance, 128, 8 * renderDistance);
 
         // Set the sampler2D to 0
@@ -79,7 +80,7 @@ public class Renderer {
         Shader.unbind();
 
         int[] rgb = new int[] {
-                0, 0, 0
+                100, 150, 256
         };
 
         // Set the clear color
@@ -101,7 +102,7 @@ public class Renderer {
         // Set the viewMatrix
         view = new Matrix4f()
                 .perspective((float) Math.toRadians(fov),
-                width / height, 0.01f, 65536.0f);
+                width / height, 0.01f, renderDistance * (float) Math.sqrt(512));
 
         // Update the viewMatrix in the shader
         shader.bind();
