@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class Camera {
-    private static final float SPEED = 0.2f;
+    private static final float SPEED = 0.1f;
 
     public Vector3f up = new Vector3f(0, 1, 0);
     public Vector3f look, right = new Vector3f();
@@ -46,7 +46,7 @@ public class Camera {
         this.look.rotateAxis((float) Math.toRadians(vertical), right.x, right.y, right.z);
 
         vel.add(acc);
-        vel.mul(0.93f);
+        vel.mul(0.9f);
         pos.add(vel);
         acc.zero();
 

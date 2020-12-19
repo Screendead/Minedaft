@@ -27,7 +27,8 @@ public class ChunkManager {
         this.renderDistance = renderDistance;
 
 //        pool = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() / 2 - 2);
-        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() - 4);
+//        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() - 4);
+        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() - 1);
 //        pool = Executors.newFixedThreadPool(64);
     }
 
@@ -45,7 +46,7 @@ public class ChunkManager {
         if (futures.size() == 0) return;
 
         for (int i = locations.size() - 1; i >= 0; i--) {
-            if (testCircle(locations.get(i)[0], locations.get(i)[1])
+            if (testCircle(renderDistance * 2, locations.get(i)[0], locations.get(i)[1])
                 || testAABB(locations.get(i)[0], 128, locations.get(i)[1])) {
                 futures.get(i).cancel(true);
                 futures.remove(i);
@@ -71,7 +72,7 @@ public class ChunkManager {
         }
 
         for (int i = data.size() - 1; i >= 0; i--) {
-            if (testCircle(data.get(i).cx, data.get(i).cz)) {
+            if (testCircle(renderDistance * 2, data.get(i).cx, data.get(i).cz)) {
                 generated.remove(indexOf(generated, data.get(i).cx, data.get(i).cz));
                 data.remove(i);
             }
@@ -116,17 +117,17 @@ public class ChunkManager {
     }
 
     private void smartAddChunkToQueue(int cx, int cz) {
-        if (testCircle(cx, cz)) return;
+        if (testCircle(renderDistance, cx, cz)) return;
         if (contains(locations, cx, cz) || contains(generated, cx, cz)) return;
 
         locations.add(new int[]{cx, cz});
         futures.add(pool.submit(() -> Chunk.generate(cx, cz)));
     }
 
-    private boolean testCircle(int cx, int cz) {
+    private boolean testCircle(float d, int cx, int cz) {
         int x = cx - camPos.x;
         int z = cz - camPos.z;
-        return x*x + z*z >= renderDistance*renderDistance;
+        return x*x + z*z >= d*d;
     }
 
     private boolean testAABB(int cx, int cy, int cz) {

@@ -6,9 +6,6 @@ import org.lwjgl.stb.STBPerlin;
 
 public class Chunk {
     private static final boolean SIMPLE_GENERATION = false;
-    private static final boolean LERP_GENERATION = false;
-    private static final int LERP = 2; // 4x4 interpolation
-
     private static final float SCALE = 0.005f;
 
     public int cx, cz;
@@ -50,10 +47,11 @@ public class Chunk {
             if (y < 64.0f) return BlockType.STONE.ordinal();
             else return BlockType.AIR.ordinal();
         } else {
-            float detail = 64.0f * STBPerlin.stb_perlin_turbulence_noise3(i, k, j, 2.0f, 0.5f, 6);
+            float detail = 128.0f * STBPerlin.stb_perlin_turbulence_noise3(i, k * 2.5f, j, 2.0f, 0.5f, 4);
 
-            if (y == 0) return BlockType.BEDROCK.ordinal();
-            else if (y < detail) return BlockType.STONE.ordinal();
+            if (detail < 64.0f) return BlockType.STONE.ordinal();
+//            if (y == 0) return BlockType.BEDROCK.ordinal();
+//            else if (y < detail) return BlockType.STONE.ordinal();
             else return BlockType.AIR.ordinal();
         }
     }

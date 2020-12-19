@@ -70,7 +70,7 @@ public class Renderer {
 //        shader.addUniform("viewPos");
 //        shader.addUniform("lampPos");
 
-        this.renderDistance = 16;
+        this.renderDistance = 4;
         world = new World(this.renderDistance);
 //        lampPos = new Vector3f(8 * renderDistance, 128, 8 * renderDistance);
 

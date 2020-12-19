@@ -5,6 +5,7 @@ import com.screendead.minedaft.Minedaft;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -61,13 +62,13 @@ public class Window {
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_SAMPLES, 4); // Enable MSAA
+//        glfwWindowHint(GLFW_SAMPLES, 4); // Enable MSAA
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable
         glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE); // The window will be alt-tabbable without iconifying
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
+//        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
 
         String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ROOT);
         if ((OS.contains("mac")) || (OS.contains("darwin"))) {

@@ -22,7 +22,7 @@ public class Minedaft {
      */
     private void run() {
         // Create the window
-        window = new Window("Minedaft", 2560/2, 1440/2, false, true);
+        window = new Window("Minedaft", 1920, 1080, true, true);
 
         // Start the game loop
         loop();

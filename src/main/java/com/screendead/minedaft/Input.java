@@ -132,9 +132,15 @@ public class Input {
                          * mods - bitfield describing which modifier keys were held down
                          */
                         switch (action) {
-                            case GLFW_PRESS -> onKeyPress(key, scancode, mods);
-                            case GLFW_RELEASE -> onKeyRelease(key, scancode, mods);
-                            case GLFW_REPEAT -> onKeyRepeat(key, scancode, mods);
+                            case GLFW_PRESS:
+                                onKeyPress(key, scancode, mods);
+                                break;
+                            case GLFW_RELEASE:
+                                onKeyRelease(key, scancode, mods);
+                                break;
+                            case GLFW_REPEAT:
+                                onKeyRepeat(key, scancode, mods);
+                                break;
                         }
                     }
                 });
@@ -151,9 +157,15 @@ public class Input {
                          * mods - bitfield describing which modifier keys were held down
                          */
                         switch (action) {
-                            case GLFW_PRESS -> onMouseButtonPress(button, mods);
-                            case GLFW_RELEASE -> onMouseButtonRelease(button, mods);
-                            case GLFW_REPEAT -> onMouseButtonRepeat(button, mods);
+                            case GLFW_PRESS:
+                                onMouseButtonPress(button, mods);
+                                break;
+                            case GLFW_RELEASE:
+                                onMouseButtonRelease(button, mods);
+                                break;
+                            case GLFW_REPEAT:
+                                onMouseButtonRepeat(button, mods);
+                                break;
                         }
                     }
                 });
