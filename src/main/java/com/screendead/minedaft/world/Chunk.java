@@ -50,7 +50,7 @@ public class Chunk {
             if (y < 64.0f) return BlockType.STONE.ordinal();
             else return BlockType.AIR.ordinal();
         } else {
-            float detail = 64.0f * STBPerlin.stb_perlin_turbulence_noise3(i, k, j, 2.0f, 0.5f, 6);
+            float detail = 1 + 127.0f * STBPerlin.stb_perlin_turbulence_noise3(i, k, j, 2.0f, 0.5f, 5);
 
             if (y == 0) return BlockType.BEDROCK.ordinal();
             else if (y < detail) return BlockType.STONE.ordinal();

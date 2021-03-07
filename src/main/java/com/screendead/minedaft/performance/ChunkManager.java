@@ -27,8 +27,8 @@ public class ChunkManager {
         this.renderDistance = renderDistance;
 
 //        pool = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() / 2 - 2);
-        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() - 4);
-//        pool = Executors.newFixedThreadPool(64);
+        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() / 2 - 2);
+//        pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() / 2 - 2);
     }
 
     public void generate() {

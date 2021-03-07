@@ -94,7 +94,6 @@ public class Input {
         glfwSetWindowSizeCallback(window.getHandle(),
                 windowSizeCallback = new GLFWWindowSizeCallback() {
 
-                    @Override
                     public void invoke(long window, int width, int height) {
                         /*
                          * window - the window that received the event
@@ -108,7 +107,6 @@ public class Input {
         glfwSetCursorPosCallback(window.getHandle(),
                 cursorPosCallback = new GLFWCursorPosCallback() {
 
-                    @Override
                     public void invoke(long window, double xpos, double ypos) {
                         /*
                          * window - the window that received the event
@@ -122,7 +120,6 @@ public class Input {
         glfwSetKeyCallback(window.getHandle(),
                 keyCallback = new GLFWKeyCallback() {
 
-                    @Override
                     public void invoke(long window, int key, int scancode, int action, int mods) {
                         /*
                          * window - the window that received the event
@@ -142,7 +139,6 @@ public class Input {
         glfwSetMouseButtonCallback(window.getHandle(),
                 mouseButtonCallback = new GLFWMouseButtonCallback() {
 
-                    @Override
                     public void invoke(long window, int button, int action, int mods) {
                         /*
                          * window - the window that received the event
@@ -161,7 +157,6 @@ public class Input {
         glfwSetScrollCallback(window.getHandle(),
                 scrollCallback = new GLFWScrollCallback() {
 
-                    @Override
                     public void invoke(long window, double xoffset, double yoffset) {
                         /*
                          * window - the window that received the event
@@ -175,7 +170,6 @@ public class Input {
         glfwSetWindowFocusCallback(window.getHandle(),
                 windowFocusCallback = new GLFWWindowFocusCallback() {
 
-                    @Override
                     public void invoke(long window, boolean focused) {
                         /*
                          * window - the window that received the event

@@ -6,23 +6,20 @@ import javax.swing.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 public class Minedaft {
     private Window window;
-    private static final float UPS = 40.0f, FPS = 60.0f;
+    private static final float UPS = 60.0f, FPS = 165.0f;
 
     /**
      * Begin the game
      */
     private void run() {
         // Create the window
-        window = new Window("Minedaft", 2560/2, 1440/2, false, true);
+        window = new Window("Minedaft", 2560, 1440, true, true);
 
         // Start the game loop
         loop();
