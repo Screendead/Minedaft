@@ -2,7 +2,6 @@ package com.screendead.minedaft.graphics;
 
 import com.screendead.minedaft.world.World;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -72,7 +71,7 @@ public class Renderer {
 //        shader.addUniform("viewPos");
 //        shader.addUniform("lampPos");
 
-        this.renderDistance = 16;
+        this.renderDistance = 24;
         world = new World(this.renderDistance);
 //        lampPos = new Vector3f(8 * renderDistance, 128, 8 * renderDistance);
 

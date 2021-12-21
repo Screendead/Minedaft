@@ -61,7 +61,7 @@ public class Window {
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_SAMPLES, 4); // Enable MSAA
+        glfwWindowHint(GLFW_SAMPLES, 16); // Enable MSAA
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable
         glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE); // The window will be alt-tabbable without iconifying
@@ -80,8 +80,8 @@ public class Window {
             throw new RuntimeException("Failed to create the GLFW window.");
 
         glfwSetInputMode(this.handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // The cursor will be disabled -- REQUIRED for macOS to play nicely!
-        if (glfwRawMouseMotionSupported())
-            glfwSetInputMode(this.handle, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+//        if (glfwRawMouseMotionSupported())
+//            glfwSetInputMode(this.handle, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
         // Set the icon of the window
         setIcon("heart.png");
