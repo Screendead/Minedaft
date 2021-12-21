@@ -9,11 +9,13 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 
 public class Renderer {
+    public static final float INITIAL_FOV = 75.0f;
+
     private Shader shader;
     World world;
     private float width = 0, height = 0;
 //    public Vector3f lampPos;
-    private float fov = 100.0f;
+    private float fov = 75.0f;
     private int renderDistance;
 
     Matrix4f view = new Matrix4f(), transform = new Matrix4f();
@@ -97,7 +99,7 @@ public class Renderer {
         this.height = height;
 
         // Set the viewport
-        glViewport(0, 0, (int) width, (int) height);
+//        glViewport(0, 0, (int) width, (int) height);
 
         // Set the viewMatrix
         view = new Matrix4f()

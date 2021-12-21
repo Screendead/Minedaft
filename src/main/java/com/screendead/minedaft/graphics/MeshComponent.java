@@ -3,23 +3,25 @@ package com.screendead.minedaft.graphics;
 import java.util.Arrays;
 
 public class MeshComponent {
-    private float[] vertices, normals, texCoords;
+    private float[] vertices, normals, texCoords, shadows;
     private int[] indices;
+    public Mesh mesh;
 
-    public MeshComponent(float[] vertices, float[] normals, float[] texCoords, int[] indices) {
+    public MeshComponent(float[] vertices, float[] normals, float[] texCoords, float[] shadows, int[] indices) {
         this.vertices = vertices;
         this.normals = normals;
         this.texCoords = texCoords;
+        this.shadows = shadows;
         this.indices = indices;
     }
 
     public MeshComponent() {
-        this(new float[] {}, new float[] {}, new float[] {}, new int[] {});
+        this(new float[] {}, new float[] {}, new float[] {}, new float[] {}, new int[] {});
     }
 
     public void combine(MeshComponent m) {
         int maxIndex = 0;
-        float[] newVertices, newNormals, newTexCoords;
+        float[] newVertices, newNormals, newTexCoords, newShadows;
         int[] newIndices;
 
         newVertices = Arrays.copyOf(vertices, vertices.length + m.vertices.length);
@@ -34,6 +36,10 @@ public class MeshComponent {
         System.arraycopy(m.texCoords, 0, newTexCoords, texCoords.length, m.texCoords.length);
         texCoords = newTexCoords;
 
+        newShadows = Arrays.copyOf(shadows, shadows.length + m.shadows.length);
+        System.arraycopy(m.shadows, 0, newShadows, shadows.length, m.shadows.length);
+        shadows = newShadows;
+
         for (int i : indices) if (i >= maxIndex) maxIndex = i + 1;
         for (int i = 0; i < m.indices.length; i++) m.indices[i] += maxIndex;
         newIndices = Arrays.copyOf(indices, indices.length + m.indices.length);
@@ -41,8 +47,9 @@ public class MeshComponent {
         indices = newIndices;
     }
 
-    public Mesh toMesh() {
-        return new Mesh(vertices, normals, texCoords, indices);
+    public void generateMesh() {
+        if (this.mesh != null) this.mesh.cleanup();
+        this.mesh = new Mesh(vertices, normals, texCoords, shadows, indices);
     }
 
     public float[] getVertices() {
@@ -55,6 +62,10 @@ public class MeshComponent {
 
     public float[] getTexCoords() {
         return texCoords;
+    }
+
+    public float[] getShadows() {
+        return shadows;
     }
 
     public int[] getIndices() {

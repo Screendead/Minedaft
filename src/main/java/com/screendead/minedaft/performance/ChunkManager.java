@@ -27,7 +27,7 @@ public class ChunkManager {
         this.renderDistance = renderDistance;
 
 //        pool = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() / 2 - 2);
-        pool = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors() - 4);
+        pool = Executors.newWorkStealingPool(10);
 //        pool = Executors.newFixedThreadPool(64);
     }
 
@@ -41,7 +41,7 @@ public class ChunkManager {
         smartGenAroundPlayer(cx, cz);
     }
 
-    public void poll(int cx, int cz) {
+    public void poll() {
         if (futures.size() == 0) return;
 
         for (int i = locations.size() - 1; i >= 0; i--) {
@@ -73,6 +73,7 @@ public class ChunkManager {
         for (int i = data.size() - 1; i >= 0; i--) {
             if (testCircle(data.get(i).cx, data.get(i).cz)) {
                 generated.remove(indexOf(generated, data.get(i).cx, data.get(i).cz));
+                data.get(i).cleanup();
                 data.remove(i);
             }
         }

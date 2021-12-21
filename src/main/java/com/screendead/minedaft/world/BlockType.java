@@ -288,6 +288,15 @@ public enum BlockType {
             }
     };
 
+    private static final float[] shadows = new float[] {
+            0.75f, // +Z
+            0.75f, // -Z
+            0.75f, // +X
+            0.75f, // -X
+            1.0f, // +Y
+            0.5f, // -Y
+    };
+
     private static final int[] indices = new int[] {
             0, 2, 1, 1, 2, 3,
             4, 6, 5, 5, 6, 7,
@@ -307,13 +316,14 @@ public enum BlockType {
         this.texCoords = texCoords;
     }
 
-    public MeshComponent getMeshComponent(boolean[] faces, int x, int y, int z) {
+    public MeshComponent getMeshComponent(boolean[] faces, int x, int y, int z, float lighting) {
         ArrayList<Integer> index = new ArrayList<>();
         for (int i = 0; i < 6; i++) if (faces[i]) index.add(i);
 
         float[] v = new float[index.size() * 12];
         float[] n = new float[index.size() * 12];
         float[] t = new float[index.size() * 8];
+        float[] s = new float[index.size() * 4];
         int[] mi = new int[index.size() * 6];
 
         for (int i = 0; i < index.size(); i++) {
@@ -332,10 +342,14 @@ public enum BlockType {
                 t[i * 8 + j] = texCoords[position][j];
             }
 
+            for (int j = 0; j < 4; j++) {
+                s[i * 4 + j] = shadows[position] * lighting;
+            }
+
             for (int j = 0; j < index.size() * 6; j++) mi[j] = indices[j];
         }
 
-        return new MeshComponent(v, n, t, mi);
+        return new MeshComponent(v, n, t, s, mi);
     }
 
     public BlockType get(int id) {

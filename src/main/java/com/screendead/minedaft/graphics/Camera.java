@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class Camera {
-    private static final float SPEED = 0.2f;
+    private static final float SPEED = 1.0f / 8;
 
     public Vector3f up = new Vector3f(0, 1, 0);
     public Vector3f look, right = new Vector3f();

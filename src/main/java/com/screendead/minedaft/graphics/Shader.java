@@ -52,6 +52,7 @@ public class Shader {
         glBindAttribLocation(program, 0, "position");
         glBindAttribLocation(program, 1, "normals");
         glBindAttribLocation(program, 2, "tex_coords");
+        glBindAttribLocation(program, 3, "shadow");
 
         glBindVertexArray(glGenVertexArrays());
         // Link and validate the shaders
@@ -87,13 +88,21 @@ public class Shader {
         uniforms.put(name, uniformLocation);
     }
 
+    private boolean checkUniform(String name) {
+        if (!uniforms.containsKey(name)) {
+            System.err.printf("No uniform defined for: %s\n", name);
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Assign a boolean value to a uniform variable
      * @param name The name of the uniform variable
      * @param value The value to assign
      */
     public void setUniform(String name, boolean value) {
-        glUniform1i(uniforms.get(name), (value) ? 1 : 0);
+        if (checkUniform(name)) glUniform1i(uniforms.get(name), (value) ? 1 : 0);
     }
 
     /**
@@ -102,7 +111,7 @@ public class Shader {
      * @param value The value to assign
      */
     void setUniform(String name, int value) {
-        glUniform1i(uniforms.get(name), value);
+        if (checkUniform(name)) glUniform1i(uniforms.get(name), value);
     }
 
     /**
@@ -111,7 +120,7 @@ public class Shader {
      * @param value The value to assign
      */
     public void setUniform(String name, float value) {
-        glUniform1f(uniforms.get(name), value);
+        if (checkUniform(name)) glUniform1f(uniforms.get(name), value);
     }
 
     /**
@@ -120,7 +129,7 @@ public class Shader {
      * @param value The value to assign
      */
     public void setUniform(String name, Vector2f value) {
-        glUniform2f(uniforms.get(name), value.x, value.y);
+        if (checkUniform(name)) glUniform2f(uniforms.get(name), value.x, value.y);
     }
 
     /**
@@ -129,7 +138,7 @@ public class Shader {
      * @param value The value to assign
      */
     public void setUniform(String name, Vector3f value) {
-        glUniform3f(uniforms.get(name), value.x, value.y, value.z);
+        if (checkUniform(name)) glUniform3f(uniforms.get(name), value.x, value.y, value.z);
     }
 
     /**
@@ -141,7 +150,7 @@ public class Shader {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
         value.get(buffer);
 
-        glUniformMatrix4fv(uniforms.get(name), false, buffer);
+        if (checkUniform(name)) glUniformMatrix4fv(uniforms.get(name), false, buffer);
     }
 
     /**

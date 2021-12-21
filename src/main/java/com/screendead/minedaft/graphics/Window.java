@@ -179,7 +179,7 @@ public class Window {
         input.dx = input.dy = 0;
 
         if (camera.zoomed) renderer.setFOV(30.0f);
-        else renderer.setFOV(100.0f);
+        else renderer.setFOV(Renderer.INITIAL_FOV);
         this.autoViewport();
 
 //        renderer.lampPos = camera.pos;
@@ -192,7 +192,8 @@ public class Window {
         int cz = (int) camera.pos.z >> 4;
 
         renderer.world.update(cx, cz);
-        if (ticks % 8 == 0) renderer.world.poll(cx, cz);
+//        if (ticks % 4 == 0) renderer.world.poll();
+        renderer.world.poll();
     }
 
     /**

@@ -15,7 +15,7 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 public class Minedaft {
     private Window window;
-    private static final float UPS = 40.0f, FPS = 60.0f;
+    private static final float UPS = 60.0f, FPS = 60.0f;
 
     /**
      * Begin the game
@@ -63,7 +63,7 @@ public class Minedaft {
             }
 
             if (System.currentTimeMillis() - timer > 1000) {
-                System.out.printf("UPS: %s, FPS: %s%n", ticks, frames);
+//                System.out.printf("UPS: %s, FPS: %s%n", ticks, frames);
                 frames = 0;
                 ticks = 0;
                 timer += 1000;

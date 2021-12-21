@@ -17,7 +17,7 @@ public class Mesh {
     private static ArrayList<Integer> vboList = new ArrayList<>();
     private final int vao, vertexCount;
 
-    public Mesh(float[] positions, float[] normals, float[] texCoords, int[] indices) {
+    public Mesh(float[] positions, float[] normals, float[] texCoords, float[] shadows, int[] indices) {
         vertexCount = indices.length;
         if (vertexCount == 0) {
             vao = -1;
@@ -26,11 +26,11 @@ public class Mesh {
 
         vao = glGenVertexArrays();
 
-        update(positions, normals, texCoords, indices);
+        update(positions, normals, texCoords, shadows, indices);
     }
 
-    public void update(float[] positions, float[] normals, float[] texCoords, int[] indices) {
-        FloatBuffer vertBuffer = null, normsBuffer = null, texBuffer = null;
+    public void update(float[] positions, float[] normals, float[] texCoords, float[] shadows, int[] indices) {
+        FloatBuffer vertBuffer = null, normsBuffer = null, texBuffer = null, shadowBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
             vboList = new ArrayList<>();
@@ -66,6 +66,15 @@ public class Mesh {
             glBufferData(GL_ARRAY_BUFFER, texBuffer, DRAW_TYPE);
             glVertexAttribPointer(2, 2, GL_FLOAT, true, 0, 0);
 
+            // Texture coordinates VBO
+            vbo = glGenBuffers();
+            vboList.add(vbo);
+            shadowBuffer = MemoryUtil.memAllocFloat(shadows.length);
+            shadowBuffer.put(shadows).flip();
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glBufferData(GL_ARRAY_BUFFER, shadowBuffer, DRAW_TYPE);
+            glVertexAttribPointer(3, 1, GL_FLOAT, true, 0, 0);
+
             // Index VBO
             vbo = glGenBuffers();
             vboList.add(vbo);
@@ -79,12 +88,13 @@ public class Mesh {
             if (vertBuffer != null) MemoryUtil.memFree(vertBuffer);
             if (normsBuffer != null) MemoryUtil.memFree(normsBuffer);
             if (texBuffer != null) MemoryUtil.memFree(texBuffer);
+            if (shadowBuffer != null) MemoryUtil.memFree(shadowBuffer);
             if (indicesBuffer != null) MemoryUtil.memFree(indicesBuffer);
         }
     }
 
     public void update(MeshComponent mc) {
-        update(mc.getVertices(), mc.getNormals(), mc.getTexCoords(), mc.getIndices());
+        update(mc.getVertices(), mc.getNormals(), mc.getTexCoords(), mc.getShadows(), mc.getIndices());
     }
 
     /**
@@ -102,6 +112,7 @@ public class Mesh {
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
             glEnableVertexAttribArray(2);
+            glEnableVertexAttribArray(3);
 
             glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
 
@@ -109,6 +120,7 @@ public class Mesh {
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
             glDisableVertexAttribArray(2);
+            glDisableVertexAttribArray(3);
             glBindVertexArray(0);
         }
     }

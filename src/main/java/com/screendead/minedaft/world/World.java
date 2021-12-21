@@ -22,8 +22,8 @@ public class World {
         chunkManager.update(cx, cz);
     }
 
-    public void poll(int cx, int cz) {
-        chunkManager.poll(cx, cz);
+    public void poll() {
+        chunkManager.poll();
     }
 
     public void render(Matrix4f view, Matrix4f transform, Matrix4f camera) {
