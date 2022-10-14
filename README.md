@@ -3,7 +3,8 @@
 A low-budget adaptation of Minecraft with LWJGL and JOML. For science.
 
 [![Minedaft](http://img.youtube.com/vi/WD6b_yN8TOw/0.jpg)](http://www.youtube.com/watch?v=WD6b_yN8TOw "Minedaft")
-[Demo](https://youtu.be/WD6b_yN8TOw)
+
+[(Demo)](https://youtu.be/WD6b_yN8TOw)
 
 ## Getting Started
 
